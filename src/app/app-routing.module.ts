@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { Route, RouterModule, Routes } from '@angular/router';
-import { LoginComponent } from './compoents/login/login.component';
-import { PortofolioComponent } from './compoents/portofolio/portofolio.component';
+import { LoginComponent } from './components/login/login.component';
+import { PortofolioComponent } from './components/portofolio/portofolio.component';
 
 const routes: Route[] = [
   { path: 'login', component: LoginComponent },

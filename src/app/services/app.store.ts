@@ -9,12 +9,6 @@ import {Router} from '@angular/router';
 import {BET20map} from '../data/bet20map';
 import {StockType} from '../models/stock-type';
 
-// export interface AppState {
-//     login: signal<Login|undefined>;
-//     loading: boolean;
-//     stocks: Array<Stock> | undefined
-//   }
-
 @Injectable({
   providedIn: 'root',
 })
@@ -79,7 +73,7 @@ export class AppStore {
 
   sendMessage(msg: object) {
     if (this.websocket.readyState != 1) {
-      console.log('fara conexiune la server');
+      console.log('no server connection');
       return;
     }
     this.websocket.send(JSON.stringify(msg));

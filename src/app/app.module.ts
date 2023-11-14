@@ -5,9 +5,9 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { LoginComponent } from './compoents/login/login.component';
+import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
-import { PortofolioComponent } from './compoents/portofolio/portofolio.component';
+import { PortofolioComponent } from './components/portofolio/portofolio.component';
 
 
 @NgModule({

@@ -9,7 +9,6 @@ import {AppStore} from 'src/app/services/app.store';
   styleUrls: ['./portofolio.component.scss'],
 })
 export class PortofolioComponent {
-  title = 'ng-portofolio';
   dataset = new Array<any>();
   marketCap = 0;
   appState = inject(AppStore);
