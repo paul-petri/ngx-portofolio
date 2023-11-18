@@ -74,6 +74,7 @@ export class AppStore {
   sendMessage(msg: object) {
     if (this.websocket.readyState != 1) {
       console.log('no server connection');
+      this.state.$loginError.set('no server connection');
       return;
     }
     this.websocket.send(JSON.stringify(msg));
