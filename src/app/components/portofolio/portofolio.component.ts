@@ -1,9 +1,13 @@
-import {Component, effect, inject} from '@angular/core';
+import {Component, computed, effect, inject, signal} from '@angular/core';
 import {BET20map} from 'src/app/data/bet20map';
 import {Stock} from 'src/app/models/stock';
 import {AppStore} from 'src/app/services/app.store';
+import { StocksComponent } from '../stocks/stocks.component';
+import { NgxChartsModule } from '@swimlane/ngx-charts';
 
 @Component({
+  standalone: true,
+  imports: [StocksComponent,NgxChartsModule],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrls: ['./portofolio.component.scss'],

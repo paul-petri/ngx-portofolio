@@ -1,0 +1,7 @@
+@for (item of stocks; track item.name) {
+    <div class="flex px-8 py-8">
+        <div> {{ item.name }} </div> <div>{{item.value}}</div>
+    </div>
+  } @empty {
+    <li> There are no items. </li>
+  }
