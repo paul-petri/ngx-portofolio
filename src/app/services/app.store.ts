@@ -56,28 +56,12 @@ export class AppStore {
     );
   }
 
-  private initWebSocket(): void {
-    this.websocket = new WebSocket('wss://api.tradeville.ro', ['apitv']);
-    this.websocket.onopen = () => this.onConnectionOpen();
-    this.websocket.onerror = () => console.log('eroare la conectare');
-    this.websocket.onmessage = (e: any) => this.onMessageReceived(e);
-  }
-
   setUser(user: User | undefined): void {
     this.state.$user.set(user);
   }
 
   setLoginError(error: string): void {
     this.state.$loginError.set(error);
-  }
-
-  sendMessage(msg: object) {
-    if (this.websocket.readyState != 1) {
-      console.log('no server connection');
-      this.state.$loginError.set('no server connection');
-      return;
-    }
-    this.websocket.send(JSON.stringify(msg));
   }
 
   logIn(): void {
@@ -89,43 +73,6 @@ export class AppStore {
         demo: this.$user()?.demo || false,
       },
     });
-  }
-
-  onConnectionOpen(): void {
-    this.storage.loadUser().subscribe((login: User | undefined) => {
-      if (login) {
-        this.setUser(login);
-      } else {
-        this.router.navigate(['/login']);
-      }
-    });
-  }
-
-  onMessageReceived(response: Message<any> | undefined) {
-    if (!response?.data) return;
-
-    let message: Message<any> | undefined;
-
-    try {
-      message = JSON.parse(response.data);
-    } catch (e) {}
-
-    console.log('--- socket message ---');
-    console.log(response);
-    console.log(message);
-
-    if (message?.cmd === Command.LOGIN) {
-      if (!message.err) {
-        this.storage.saveUser(this.mapMeesageToLogin(message));
-        this.getPortofolio();
-      } else {
-        this.state.$loginError.set(message.err);
-      }
-    }
-
-    if (message?.cmd === Command.PORTOFOLIO) {
-      this.mapPortofolio(message.data);
-    }
   }
 
   mapMeesageToLogin(message: any): User {
@@ -155,5 +102,58 @@ export class AppStore {
 
     this.state.$stocks.set(myPortofolio);
     this.router.navigate(['/portofolio']);
+  }
+
+  private initWebSocket(): void {
+    this.websocket = new WebSocket('wss://api.tradeville.ro', ['apitv']);
+    this.websocket.onopen = () => this.onConnectionOpen();
+    this.websocket.onerror = () => console.log('eroare la conectare');
+    this.websocket.onmessage = (e: any) => this.onMessageReceived(e);
+  }
+
+  private sendMessage(msg: object) {
+    if (this.websocket.readyState != 1) {
+      console.log('no server connection');
+      this.state.$loginError.set('no server connection');
+      return;
+    }
+    this.websocket.send(JSON.stringify(msg));
+  }
+
+  private onMessageReceived(response: Message<any> | undefined) {
+    if (!response?.data) return;
+
+    let message: Message<any> | undefined;
+
+    try {
+      message = JSON.parse(response.data);
+    } catch (e) {}
+
+    console.log('--- socket message ---');
+    console.log(response);
+    console.log(message);
+
+    if (message?.cmd === Command.LOGIN) {
+      if (!message.err) {
+        this.storage.saveUser(this.mapMeesageToLogin(message));
+        this.getPortofolio();
+      } else {
+        this.state.$loginError.set(message.err);
+      }
+    }
+
+    if (message?.cmd === Command.PORTOFOLIO) {
+      this.mapPortofolio(message.data);
+    }
+  }
+
+  private onConnectionOpen(): void {
+    this.storage.loadUser().subscribe((login: User | undefined) => {
+      if (login) {
+        this.setUser(login);
+      } else {
+        this.router.navigate(['/login']);
+      }
+    });
   }
 }
