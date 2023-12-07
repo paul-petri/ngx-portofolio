@@ -79,7 +79,7 @@ export class AppStore {
     return {
       user: message.prm.coduser,
       password: message.prm.parola,
-      demo: message.prm.parola,
+      demo: message.prm.demo,
     };
   }
 
