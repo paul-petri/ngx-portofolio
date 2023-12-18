@@ -106,7 +106,7 @@ export class AppStore {
       }
         }
       });
-      console.log(myPortofolio);
+      myPortofolio.sort((a: Stock, b: Stock) => (b.betProc || 0) - (a.betProc || 0));
       
       this.state.$stocks.set(myPortofolio);
     };
