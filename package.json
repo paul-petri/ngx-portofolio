@@ -19,6 +19,8 @@
     "@angular/platform-browser-dynamic": "^17.0.2",
     "@angular/router": "^17.0.2",
     "@swimlane/ngx-charts": "^20.4.1",
+    "ngx-file-drop": "^16.0.0",
+    "ngx-papaparse": "^8.0.0",
     "rxjs": "~7.8.0",
     "tslib": "^2.3.0",
     "zone.js": "~0.14.2"

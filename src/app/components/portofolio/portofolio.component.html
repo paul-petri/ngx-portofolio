@@ -1,27 +1,76 @@
 <div class="h-full dark:bg-gray-900">
-  <header class="bg-white shadow dark:bg-gray-800 flex items-center justify-between">
-    <div class=" max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
-      <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">Market Cap : {{ marketCap }}</h1>
+  <header
+    class="bg-white shadow dark:bg-gray-800 flex items-center justify-between"
+  >
+    <div class="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
+      <h1
+        class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
+      >
+        Market Cap : {{ marketCap }}
+      </h1>
     </div>
     <div class="px-4">
-      <button (click)="logOut()" type="submit"
-        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 content-center">
+      <button
+        (click)="logOut()"
+        type="submit"
+        class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 content-center"
+      >
         <span>Log</span><span>out</span>
       </button>
     </div>
   </header>
 
   @if (loading) {
-    <div *ngIf="loading"> Loading </div>
+  <div *ngIf="loading">Loading</div>
   } @else {
-    <div class="min-h-full">
-      <div class="flex max-w-7xl py-6 sm:px-6 lg:px-8 dark-chart" *ngIf="!loading">
-        <ngx-charts-bar-vertical [results]="dataset" [xAxisLabel]="'x-axis'" [legendTitle]="'legend'"
-          [yAxisLabel]="'y-axis'" [legend]="true" [showXAxisLabel]="true" [showYAxisLabel]="true" [xAxis]="true"
-          [yAxis]="true" [gradient]="true">
-        </ngx-charts-bar-vertical>
-      </div>
+  <div class="min-h-full">
+    <div class="flex py-6 sm:px-6 lg:px-8 dark-chart" *ngIf="!loading">
+      <ngx-charts-bar-vertical
+        [results]="dataset"
+        [xAxisLabel]="'x-axis'"
+        [legendTitle]="'legend'"
+        [yAxisLabel]="'y-axis'"
+        [legend]="true"
+        [showXAxisLabel]="true"
+        [showYAxisLabel]="true"
+        [xAxis]="true"
+        [yAxis]="true"
+        [gradient]="true"
+      >
+      </ngx-charts-bar-vertical>
     </div>
+  </div>
   }
 
+  <p class="dark:text-white p-6">
+    Pentru a face download fisierului .CSV accesati
+    <a
+      href=" https://portal.tradeville.ro/mytv/mytv.htm"
+      target="_blank"
+      class="text-lime-500"
+    >
+      portal.tradeville.ro
+    </a>
+    la sectiunea Portofoliu -> Optiuni -> Raport CSV.
+
+    <span class="group relative">
+      <span class="text-lg font-bold">Hover over me</span>
+      <img
+        src="assets/img/csv-file.png"
+        alt="Your Image"
+        class="absolute top-0 left-0 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
+      />
+    </span>
+  </p>
+
+  <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
+    <ng-template
+      ngx-file-drop-content-tmp
+      let-openFileSelector="openFileSelector"
+    >
+      <button type="button" (click)="openFileSelector()">
+        Click here to upload csv file from your portofolio.
+      </button>
+    </ng-template>
+  </ngx-file-drop>
 </div>

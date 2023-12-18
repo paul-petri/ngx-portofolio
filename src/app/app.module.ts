@@ -7,7 +7,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { PortofolioComponent } from './components/portofolio/portofolio.component';
-
+import { NgxFileDropModule } from 'ngx-file-drop';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -18,6 +18,7 @@ import { PortofolioComponent } from './components/portofolio/portofolio.componen
     BrowserAnimationsModule,
     FormsModule,
     PortofolioComponent,
+    NgxFileDropModule,
   ],
   providers: [],
   bootstrap: [AppComponent],

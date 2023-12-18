@@ -1,4 +1,4 @@
-import {Injectable, computed, inject, signal, effect} from '@angular/core';
+import {Injectable, inject, signal, effect} from '@angular/core';
 import {Portofolio} from '../models/portofolio';
 import {Message} from '../models/message';
 import {Command} from '../models/commands';
@@ -81,6 +81,37 @@ export class AppStore {
       password: message.prm.parola,
       demo: message.prm.demo,
     };
+  }
+
+  mapCSVToStocks(csv: File): void {
+    const myPortofolio: Array<Stock> = [];
+    const reader = new FileReader();
+
+    reader.onload = () => {
+      const text = reader.result;
+      const lines = text?.toString().split('\n');
+      lines?.forEach((line: string, idx:number) => {
+        if(idx > 0) {
+          const data = line.split('\t');
+          const betStock = BET20map.get(data[0]);
+          if (betStock) {
+            myPortofolio.push({
+              symbol: data[0],
+              name: betStock.name,
+              proc: 1,
+              value: Number(data[16]),
+              type: StockType.BET,
+              betProc: betStock.proc,
+            });
+      }
+        }
+      });
+      console.log(myPortofolio);
+      
+      this.state.$stocks.set(myPortofolio);
+    };
+    reader.readAsText(csv);
+
   }
 
   mapPortofolio(data: Portofolio): void {

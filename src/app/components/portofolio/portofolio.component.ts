@@ -1,16 +1,17 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
-import {BET20map} from 'src/app/data/bet20map';
-import {Stock} from 'src/app/models/stock';
-import {AppStore} from 'src/app/services/app.store';
+import { Component, computed, effect, inject, signal } from '@angular/core';
+import { BET20map } from 'src/app/data/bet20map';
+import { Stock } from 'src/app/models/stock';
+import { AppStore } from 'src/app/services/app.store';
 import { StocksComponent } from '../stocks/stocks.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
+import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent,NgxChartsModule],
+  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
-  styleUrls: ['./portofolio.component.scss'],
+  styleUrl: './portofolio.component.scss',
 })
 export class PortofolioComponent {
   dataset = new Array<any>();
@@ -21,6 +22,7 @@ export class PortofolioComponent {
   constructor() {
     effect(() => {
       if (this.appState.$stocks()) {
+        this.dataset = [];
         this.setChartData();
       }
     });
@@ -28,6 +30,22 @@ export class PortofolioComponent {
 
   logOut(): void {
     this.appState.logOut();
+  }
+
+  dropped(files: NgxFileDropEntry[]) {
+    for (const droppedFile of files) {
+      // Is it a file?
+      if (droppedFile.fileEntry.isFile) {
+        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
+        fileEntry.file((file: File) => {
+          this.parseCSV(file);
+        });
+      }
+    }
+  }
+
+  parseCSV(file: File): void {
+    this.appState.mapCSVToStocks(file);
   }
 
   private setChartData(): void {
@@ -42,7 +60,7 @@ export class PortofolioComponent {
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
         stock,
-        BET20map.get(stock.symbol)?.proc || 1,
+        BET20map.get(stock.symbol)?.proc || 1
       );
       this.dataset.push({
         name: stock.symbol,
