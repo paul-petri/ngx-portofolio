@@ -93,6 +93,7 @@ export const myPortofolio: Array<Stock> = [
     symbol: 'TEL',
     name: 'Transelectrica',
     proc: 0,
+    value: 1000,
     type: StockType.BET,
   },
   {
@@ -106,12 +107,14 @@ export const myPortofolio: Array<Stock> = [
     symbol: 'BVB',
     name: 'Bursa Valori Bucuresti',
     proc: 0,
+    value: 1500,
     type: StockType.BET,
   },
   {
     symbol: 'AQ',
     name: 'Aquila',
     proc: 0,
+    value: 1000,
     type: StockType.BET,
   },
   {
@@ -132,6 +135,7 @@ export const myPortofolio: Array<Stock> = [
     symbol: 'COTE',
     name: 'Conpet',
     proc: 0,
+    value: 1000,
     type: StockType.BET,
   },
   {
@@ -140,13 +144,6 @@ export const myPortofolio: Array<Stock> = [
     proc: 0.6,
     type: StockType.AERO,
     value: 187.50
-  },
-  {
-    symbol: 'BONA',
-    name: 'Bonas',
-    proc: 18.4,
-    type: StockType.AERO,
-    value: 5448
   },
   {
     symbol: 'AROBS',

@@ -20,11 +20,17 @@
     </div>
   </header>
 
+  <p class="dark:text-white p-6 lg:mx-36">
+    In mod ideal toate ar trebui sa fie pe 0, ce este peste inseamna ca e nevoie
+    sa cumperi de acea suma, ce este sub ca ai prea mult dintr-o anumita
+    actiune.
+  </p>
+
   @if (loading) {
   <div *ngIf="loading">Loading</div>
   } @else {
-  <div class="min-h-full">
-    <div class="flex py-6 sm:px-6 lg:px-8 dark-chart" *ngIf="!loading">
+  <div class="h-screen lg:mx-6">
+    <div class="min-h-full sm:px-6 dark-chart" *ngIf="!loading">
       <ngx-charts-bar-vertical
         [results]="dataset"
         [xAxisLabel]="'x-axis'"
@@ -42,7 +48,7 @@
   </div>
   }
 
-  <p class="dark:text-white p-6">
+  <p class="dark:text-white p-6 lg:mx-36">
     Pentru a face download fisierului .CSV accesati
     <a
       href=" https://portal.tradeville.ro/mytv/mytv.htm"
@@ -58,19 +64,24 @@
       <img
         src="assets/img/csv-file.png"
         alt="Your Image"
-        class="absolute top-0 left-0 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
+        class="absolute top-0 left-100 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
       />
     </span>
   </p>
 
-  <ngx-file-drop dropZoneLabel="Drop files here" (onFileDrop)="dropped($event)">
-    <ng-template
-      ngx-file-drop-content-tmp
-      let-openFileSelector="openFileSelector"
+  <div class="lg:mx-36 pb-20">
+    <ngx-file-drop
+      dropZoneLabel="Drop files here"
+      (onFileDrop)="dropped($event)"
     >
-      <button type="button" (click)="openFileSelector()">
-        Click here to upload csv file from your portofolio.
-      </button>
-    </ng-template>
-  </ngx-file-drop>
+      <ng-template
+        ngx-file-drop-content-tmp
+        let-openFileSelector="openFileSelector"
+      >
+        <button type="button" (click)="openFileSelector()">
+          Click here to upload csv file from your portofolio.
+        </button>
+      </ng-template>
+    </ngx-file-drop>
+  </div>
 </div>

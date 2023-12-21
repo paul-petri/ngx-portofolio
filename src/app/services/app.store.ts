@@ -8,6 +8,7 @@ import {User} from '../models/login';
 import {Router} from '@angular/router';
 import {BET20map} from '../data/bet20map';
 import {StockType} from '../models/stock-type';
+import { myPortofolio } from '../data/mine';
 
 @Injectable({
   providedIn: 'root',
@@ -30,19 +31,32 @@ export class AppStore {
   constructor(private router: Router) {
     this.initWebSocket();
     this.onLoginChanges();
+    this.checkStocks();
+  }
+
+  checkStocks(): void {
+    if (!this.$stocks()?.values() && this.storage.getPorfotolio()) {
+      this.state.$stocks.set(this.storage.getPorfotolio());
+      this.router.navigate(['portofolio']);
+    }
   }
 
   private onLoginChanges(): void {
     effect(() => {
       if (this.$user()?.user && this.$user()?.password) {
+        if(this.$user()?.demo) {
+          this.logInDemo();
+          return;
+        }
         this.logIn();
       }
-    });
+    }, { allowSignalWrites: true });
   }
 
   logOut(): void {
-    this.storage.removeUser();
+    this.storage.clearData();
     this.setUser(undefined);
+    this.state.$stocks.set(undefined);
     this.router.navigate(['/login']);
   }
 
@@ -109,6 +123,7 @@ export class AppStore {
       myPortofolio.sort((a: Stock, b: Stock) => (b.betProc || 0) - (a.betProc || 0));
       
       this.state.$stocks.set(myPortofolio);
+      this.storage.savePortofolio(myPortofolio);
     };
     reader.readAsText(csv);
 
@@ -130,7 +145,6 @@ export class AppStore {
         });
       }
     });
-
     this.state.$stocks.set(myPortofolio);
     this.router.navigate(['/portofolio']);
   }
@@ -144,7 +158,6 @@ export class AppStore {
 
   private sendMessage(msg: object) {
     if (this.websocket.readyState != 1) {
-      console.log('no server connection');
       this.state.$loginError.set('no server connection');
       return;
     }
@@ -186,5 +199,31 @@ export class AppStore {
         this.router.navigate(['/login']);
       }
     });
+  }
+
+  private async logInDemo(): Promise<any> {
+    this.storage.saveUser(this.$user()!);
+    const betPortofilio = new Array<Stock>();
+
+    if(this.$stocks()?.values()) {
+      return;
+    }
+
+
+    myPortofolio.forEach((stock: Stock) => {
+      const betStock = BET20map.get(stock.symbol);
+      if (betStock) {
+        betPortofilio.push({
+          symbol: stock.symbol,
+          name: betStock.name,
+          proc: 1,
+          value: stock.value,
+          type: StockType.BET,
+          betProc: betStock.proc,
+        });
+      }
+    });
+    this.state.$stocks.set(betPortofilio);
+    this.router.navigate(['/portofolio']);
   }
 }
