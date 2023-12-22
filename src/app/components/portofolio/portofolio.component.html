@@ -2,6 +2,14 @@
   <header
     class="bg-white shadow dark:bg-gray-800 flex items-center justify-between"
   >
+    <div class="px-4">
+      <button
+        (click)="chartView = !chartView"
+        class="text-white bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+      >
+       @if (chartView) {Detailed View} @else { Chart View}
+      </button>
+    </div>
     <div class="max-w-7xl px-4 py-6 sm:px-6 lg:px-8">
       <h1
         class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white"
@@ -20,31 +28,63 @@
     </div>
   </header>
 
-  <p class="dark:text-white p-6 lg:mx-36 inline-block">
-    In mod ideal toate ar trebui sa fie pe 0, ce este peste inseamna ca e nevoie
-    sa cumperi de acea suma, ce este sub ca ai prea mult dintr-o anumita
-    actiune.
-  </p>
+  @if (chartView) {
+  <div class="chart">
+    <p class="dark:text-white p-6 lg:mx-36 inline-block">
+      In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0,
+      ce este peste inseamna ca e nevoie sa cumperi de acea suma, ce este sub
+      inseamna ca ai o detinere prea mare.
+    </p>
 
-  @if (loading) {
-  <div *ngIf="loading">Loading</div>
-  } @else {
-  <div class="h-screen lg:mx-6">
-    <div class="min-h-full sm:px-6 dark-chart" *ngIf="!loading">
-      <ngx-charts-bar-vertical
-        [results]="dataset"
-        [xAxisLabel]="'x-axis'"
-        [legendTitle]="'legend'"
-        [yAxisLabel]="'y-axis'"
-        [legend]="true"
-        [showXAxisLabel]="true"
-        [showYAxisLabel]="true"
-        [xAxis]="true"
-        [yAxis]="true"
-        [gradient]="true"
-      >
-      </ngx-charts-bar-vertical>
+    @if (loading) {
+    <div *ngIf="loading">Loading</div>
+    } @else {
+    <div class="h-screen lg:mx-6">
+      <div class="min-h-full sm:px-6 dark-chart" *ngIf="!loading">
+        <ngx-charts-bar-vertical
+          [results]="dataset"
+          [xAxisLabel]="'x-axis'"
+          [legendTitle]="'legend'"
+          [yAxisLabel]="'y-axis'"
+          [legend]="true"
+          [showXAxisLabel]="true"
+          [showYAxisLabel]="true"
+          [xAxis]="true"
+          [yAxis]="true"
+          [gradient]="true"
+        >
+        </ngx-charts-bar-vertical>
+      </div>
     </div>
+    }
+  </div>
+  } @else {
+  <div class="flex flex-wrap justify-center mt-10">
+    @for (stock of detailedSrocks(); track $index) {
+
+    <div
+      class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+    >
+      <h5
+        class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-keep"
+      >
+        {{ stock.name }}
+        <span class="text-lime-500"> {{ stock.symbol }} </span>
+      </h5>
+      <div class="font-normal text-gray-700 dark:text-gray-400">
+        <div>Total : {{ stock.value || 0 | number : '0.0-3' }}</div>
+        @if(stock.toBuy! > 0){
+        <div class="text-lime-500">
+          De cumparat: {{ stock.toBuy | number : '0.0-3' }}
+        </div>
+        } @else if(stock.toBuy! < 0){
+        <div class="text-blue-700">
+          Peste: {{ -1 * stock.toBuy! | number : '0.3-3' }}
+        </div>
+        }
+      </div>
+    </div>
+    }
   </div>
   }
 

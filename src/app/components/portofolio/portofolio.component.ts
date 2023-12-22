@@ -18,14 +18,31 @@ export class PortofolioComponent {
   marketCap = 0;
   appState = inject(AppStore);
   loading = true;
+  chartView = true;
+  detailedSrocks = signal(new Array<Stock>());
 
   constructor() {
-    effect(() => {
-      if (this.appState.$stocks()) {
-        this.dataset = [];
-        this.setChartData();
-      }
-    });
+    effect(
+      () => {
+        if (this.appState.$stocks()) {
+          this.marketCap =
+            this.appState
+              .$stocks()
+              ?.reduce(
+                (sum: number, stock: Stock) => sum + (stock?.value || 0),
+                0
+              ) || 0;
+
+          this.dataset = [];
+          this.setChartData();
+        }
+      },
+      { allowSignalWrites: true }
+    );
+  }
+
+  stocks(): Array<Stock> {
+    return this.appState.$stocks() || [];
   }
 
   logOut(): void {
@@ -49,30 +66,35 @@ export class PortofolioComponent {
   }
 
   private setChartData(): void {
-    this.marketCap =
-      this.appState
-        .$stocks()
-        ?.reduce((sum: number, stock: Stock) => sum + (stock?.value || 0), 0) ||
-      0;
-
+    this.detailedSrocks.set([]);
     this.setStockProcentPerMarket(this.appState.$stocks()!);
+
+    let newStocks = new Array<Stock>();
 
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
         stock,
         BET20map.get(stock.symbol)?.proc || 1
       );
+
       this.dataset.push({
         name: stock.symbol,
         value,
       });
-    });
-    this.addNonExistingStocks();
+      const clone = { ...stock };
+      clone.toBuy = value;
 
+      newStocks.push(clone);
+    });
+
+    this.detailedSrocks.set(newStocks);
+    this.addNonExistingStocks();
     this.loading = false;
   }
 
   private addNonExistingStocks(): void {
+    let newStocks: Stock[] = [];
+
     for (let key of BET20map.keys()) {
       const exists = this.appState
         .$stocks()
@@ -84,8 +106,17 @@ export class PortofolioComponent {
           name: bet.symbol,
           value: this.getStockBuyValue(bet, bet.proc),
         });
+        newStocks.push({
+          name: bet.name,
+          symbol: bet.symbol,
+          toBuy: this.getStockBuyValue(bet, bet.proc),
+          value: 0,
+          proc: 0,
+          type: bet.type,
+        });
       }
     }
+    this.detailedSrocks.update((stocks) => stocks.concat(newStocks));
   }
 
   private getStockBuyValue(stock: Stock, betProc: number): number {
