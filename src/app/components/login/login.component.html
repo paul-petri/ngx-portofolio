@@ -1,5 +1,33 @@
 <div class="flex flex-row flex-wrap dark:bg-gray-900">
   <div class="bg-gray-50 dark:bg-gray-900 lg:w-1/2 mx-auto">
+    <section
+      class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:h-screen lg:py-0"
+    >
+      <p class="dark:text-white">
+        In order to have access to your account you must first file a request on
+        tradevile.
+      </p>
+      <a
+        href="https://api.tradeville.ro/"
+        target="_blank"
+        class="text-lime-500"
+      >
+        Api Tradevile
+      </a>
+      <p class="dark:text-white p-6">
+        You can access the demo account utill then, using dummy data or you can uplad your .CSV file.
+      </p>
+      <button
+        (click)="logInDemo()"
+        type="submit"
+        class="text-white bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+      >
+        Sign in as guest
+      </button>
+    </section>
+  </div>
+  
+  <div class="bg-gray-50 dark:bg-gray-900 lg:w-1/2 mx-auto">
     <div
       class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:h-screen lg:py-0"
     >
@@ -110,32 +138,5 @@
     </div>
     
   </div>
-  <div class="bg-gray-50 dark:bg-gray-900 lg:w-1/2 mx-auto">
-    <section
-      class="flex flex-col items-center justify-center px-6 py-8 mx-auto lg:h-screen lg:py-0"
-    >
-      <p class="dark:text-white">
-        In order to have access to your account you must first file a request on
-        tradevile.
-      </p>
-      <a
-        href="https://api.tradeville.ro/"
-        target="_blank"
-        class="text-lime-500"
-      >
-        Api Tradevile
-      </a>
-      <p class="dark:text-white p-6">
-        You can access the demo account utill then, using dummy data or you can uplad your .CSV file.
-      </p>
-      <button
-        (click)="logInDemo()"
-        type="submit"
-        class="text-white bg-primary-600 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
-      >
-        Sign in as guest
-      </button>
-    </section>
-    
-  </div>
+
 </div>
