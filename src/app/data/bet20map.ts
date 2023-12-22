@@ -24,7 +24,7 @@ export const BET20map: Map<string, Stock> = new Map([
     'SNP',
     {
       symbol: 'SNP',
-      name: 'Nuclear Electrica',
+      name: 'OMV Petrom',
       proc: 17.23,
       type: StockType.BET,
     },
