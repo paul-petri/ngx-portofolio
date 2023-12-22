@@ -16,7 +16,7 @@ export const BET20: Array<Stock> = [
   },
   {
     symbol: 'SNP',
-    name: 'Nuclear Electrica',
+    name: 'OMV Petrom',
     proc: 17.23,
     type: StockType.BET,
   },
