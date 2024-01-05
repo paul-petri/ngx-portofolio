@@ -8,6 +8,6 @@ export type Stock = {
   qty: number;
   value?: number;
   toBuy?: number;
-  cProc?: number; //catogory procent BET AERO
+  cProc?: number; //category procent BET AERO
   betProc?: number;
 };

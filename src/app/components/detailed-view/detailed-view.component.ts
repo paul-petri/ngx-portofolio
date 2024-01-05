@@ -80,6 +80,7 @@ export class DetailedViewComponent {
 
     this.detailedSrocks.set(newStocks);
     this.addNonExistingStocks();
+    this.detailedSrocks.update((stocks) => stocks.sort((a, b) => b.betProc! - a.betProc!));
   }
 
   private addNonExistingStocks(): void {
