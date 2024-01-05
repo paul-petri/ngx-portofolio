@@ -5,10 +5,11 @@ import { AppStore } from 'src/app/services/app.store';
 import { StocksComponent } from '../stocks/stocks.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
+import { DetailedViewComponent } from '../detailed-view/detailed-view.component';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule],
+  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule, DetailedViewComponent],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrl: './portofolio.component.scss',
@@ -19,7 +20,6 @@ export class PortofolioComponent {
   appState = inject(AppStore);
   loading = true;
   chartView = true;
-  detailedSrocks = signal(new Array<Stock>());
 
   constructor() {
     effect(
@@ -66,7 +66,7 @@ export class PortofolioComponent {
   }
 
   private setChartData(): void {
-    this.detailedSrocks.set([]);
+   
     this.setStockProcentPerMarket(this.appState.$stocks()!);
 
     let newStocks = new Array<Stock>();
@@ -87,7 +87,6 @@ export class PortofolioComponent {
       newStocks.push(clone);
     });
 
-    this.detailedSrocks.set(newStocks);
     this.addNonExistingStocks();
     this.loading = false;
   }
@@ -109,6 +108,7 @@ export class PortofolioComponent {
         newStocks.push({
           name: bet.name,
           symbol: bet.symbol,
+          qty: 0,
           toBuy: this.getStockBuyValue(bet, bet.proc),
           value: 0,
           proc: 0,
@@ -116,7 +116,6 @@ export class PortofolioComponent {
         });
       }
     }
-    this.detailedSrocks.update((stocks) => stocks.concat(newStocks));
   }
 
   private getStockBuyValue(stock: Stock, betProc: number): number {

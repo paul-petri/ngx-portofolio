@@ -5,6 +5,7 @@ export type Stock = {
   proc: number;
   type: StockType;
   symbol: string;
+  qty: number;
   value?: number;
   toBuy?: number;
   cProc?: number; //catogory procent BET AERO
