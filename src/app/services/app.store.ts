@@ -1,21 +1,25 @@
-import {Injectable, inject, signal, effect} from '@angular/core';
-import {Portofolio} from '../models/portofolio';
-import {Message} from '../models/message';
-import {Command} from '../models/commands';
-import {Stock} from '../models/stock';
-import {StorageService} from './storage.service';
-import {User} from '../models/login';
-import {Router} from '@angular/router';
-import {BET20map} from '../data/bet20map';
-import {StockType} from '../models/stock-type';
+import { Injectable, inject, signal, effect } from '@angular/core';
+import { Portofolio } from '../models/portofolio';
+import { Message } from '../models/message';
+import { Command } from '../models/commands';
+import { Stock } from '../models/stock';
+import { StorageService } from './storage.service';
+import { User } from '../models/login';
+import { Router } from '@angular/router';
+import { BET20map } from '../data/bet20map';
+import { StockType } from '../models/stock-type';
 import { myPortofolio } from '../data/mine';
+import { ToastrService } from 'ngx-toastr';
 
 @Injectable({
   providedIn: 'root',
 })
 export class AppStore {
   private storage = inject(StorageService);
+  private toastr = inject(ToastrService);
+
   private websocket!: WebSocket;
+  private evaluationIDX = 16;
 
   private readonly state = {
     $loading: signal<boolean>(true),
@@ -23,6 +27,7 @@ export class AppStore {
     $stocks: signal<Array<Stock> | undefined>(undefined),
     $loginError: signal<string>(''),
   };
+
 
   readonly $user = this.state.$user.asReadonly();
   readonly $stocks = this.state.$stocks.asReadonly();
@@ -42,15 +47,18 @@ export class AppStore {
   }
 
   private onLoginChanges(): void {
-    effect(() => {
-      if (this.$user()?.user && this.$user()?.password) {
-        if(this.$user()?.demo) {
-          this.logInDemo();
-          return;
+    effect(
+      () => {
+        if (this.$user()?.user && this.$user()?.password) {
+          if (this.$user()?.demo) {
+            this.logInDemo();
+            return;
+          }
+          this.logIn();
         }
-        this.logIn();
-      }
-    }, { allowSignalWrites: true });
+      },
+      { allowSignalWrites: true }
+    );
   }
 
   logOut(): void {
@@ -66,7 +74,7 @@ export class AppStore {
 
   getPortofolio(): void {
     this.websocket.send(
-      JSON.stringify({cmd: Command.PORTOFOLIO, prm: {data: null}}),
+      JSON.stringify({ cmd: Command.PORTOFOLIO, prm: { data: null } })
     );
   }
 
@@ -104,9 +112,15 @@ export class AppStore {
     reader.onload = () => {
       const text = reader.result;
       const lines = text?.toString().split('\n');
-      lines?.forEach((line: string, idx:number) => {
-        if(idx > 0) {
-          const data = line.split('\t');
+      for(const { idx, line } of lines!.map((line, idx) => ({ idx, line }))) {
+        const data = line.split('\t');
+        if (idx === 1) {
+          this.evaluationIDX = data.indexOf('eval');
+          if (this.evaluationIDX === -1) { 
+            this.toastr.error('CSV invalid', 'Eroare');
+            return;
+          }
+        } else if (idx > 1) {
           const betStock = BET20map.get(data[0]);
           if (betStock) {
             myPortofolio.push({
@@ -114,20 +128,22 @@ export class AppStore {
               name: betStock.name,
               proc: 1,
               qty: Number(data[2]),
-              value: Number(data[16]),
+              value: Number(data[this.evaluationIDX]),
               type: StockType.BET,
               betProc: betStock.proc,
             });
-      }
+          }
         }
-      });
-      myPortofolio.sort((a: Stock, b: Stock) => (b.betProc || 0) - (a.betProc || 0));
+      }
       
+      myPortofolio.sort(
+        (a: Stock, b: Stock) => (b.betProc || 0) - (a.betProc || 0)
+      );
+
       this.state.$stocks.set(myPortofolio);
       this.storage.savePortofolio(myPortofolio);
     };
     reader.readAsText(csv);
-
   }
 
   mapPortofolio(data: Portofolio): void {
@@ -207,10 +223,9 @@ export class AppStore {
     this.storage.saveUser(this.$user()!);
     const betPortofilio = new Array<Stock>();
 
-    if(this.$stocks()?.values()) {
+    if (this.$stocks()?.values()) {
       return;
     }
-
 
     myPortofolio.forEach((stock: Stock) => {
       const betStock = BET20map.get(stock.symbol);

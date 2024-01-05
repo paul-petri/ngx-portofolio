@@ -8,6 +8,7 @@ import { LoginComponent } from './components/login/login.component';
 import { FormsModule } from '@angular/forms';
 import { PortofolioComponent } from './components/portofolio/portofolio.component';
 import { NgxFileDropModule } from 'ngx-file-drop';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
   declarations: [AppComponent, LoginComponent],
@@ -19,6 +20,8 @@ import { NgxFileDropModule } from 'ngx-file-drop';
     FormsModule,
     PortofolioComponent,
     NgxFileDropModule,
+    BrowserAnimationsModule, // required animations module
+    ToastrModule.forRoot(), // ToastrModule added
   ],
   providers: [],
   bootstrap: [AppComponent],

@@ -1,5 +1,5 @@
 export enum FilterType {
-    ALL = 'All',
-    TO_BUY = 'To Buy',
-    OVER = 'Over',
+    ALL = 'Toate',
+    TO_BUY = 'De cumprat',
+    OVER = 'Peste',
 }
