@@ -12,12 +12,13 @@ import { BET20map } from 'src/app/data/bet20map';
 import { FilterType } from 'src/app/models/filter-type.enum';
 import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-detailed-view',
   standalone: true,
   templateUrl: './detailed-view.component.html',
-  imports: [CommonModule],
+  imports: [CommonModule, FormsModule],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DetailedViewComponent {
@@ -25,6 +26,7 @@ export class DetailedViewComponent {
 
   readonly filterType = FilterType;
 
+  sortByBuy = signal(false);
   ddVisible = signal(false);
   selectedFilter = signal(FilterType.ALL);
   detailedSrocks = signal(new Array<Stock>());
@@ -32,6 +34,12 @@ export class DetailedViewComponent {
   filterSrocks = computed(() => {
     const filter = this.selectedFilter();
     const stocks = this.detailedSrocks();
+
+    if(this.sortByBuy())  {
+      stocks.sort((a, b) => b.toBuy! - a.toBuy!);
+    } else {  
+      stocks.sort((a, b) => b.betProc! - a.betProc!);
+    }
 
     if (filter === FilterType.ALL) {
       return stocks;
@@ -80,7 +88,6 @@ export class DetailedViewComponent {
 
     this.detailedSrocks.set(newStocks);
     this.addNonExistingStocks();
-    this.detailedSrocks.update((stocks) => stocks.sort((a, b) => b.betProc! - a.betProc!));
   }
 
   private addNonExistingStocks(): void {
@@ -101,6 +108,7 @@ export class DetailedViewComponent {
           value: 0,
           proc: 0,
           type: bet.type,
+          betProc: bet.proc,
         });
       }
     }

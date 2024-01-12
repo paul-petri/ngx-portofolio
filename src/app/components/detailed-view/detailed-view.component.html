@@ -1,6 +1,6 @@
 <div class="flex justify-center items-center">
   <div class="relative inline-block text-left">
-    <div>
+    <div class="flex items-center">
       <button
         id="dropdownBgHoverButton"
         data-dropdown-toggle="dropdownBgHover"
@@ -8,7 +8,7 @@
         type="button"
         (click)="toggleDD()"
       >
-        Fliter
+        Filtru
         <svg
           class="w-2.5 h-2.5 ms-3"
           aria-hidden="true"
@@ -25,6 +25,10 @@
           />
         </svg>
       </button>
+      <div class="flex items-center ml-4">
+        <input [ngModel]="sortByBuy()" (ngModelChange)="sortByBuy.set($event)" type="checkbox" class="w-4 h-4 text-blue-600 bg-gray-100 border-gray-300 rounded focus:ring-blue-500 dark:focus:ring-blue-600 dark:ring-offset-gray-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+        <label for="default-checkbox" class="ms-2 text-sm font-medium text-gray-900 dark:text-gray-300">Sortare dupa suma de coumparat</label>
+    </div>
     </div>
     <div
       *ngIf="ddVisible()"
@@ -77,19 +81,17 @@
     </h5>
     <div class="font-normal text-gray-700 dark:text-gray-400">
       <div>{{ stock.value || 0 | number : '0.0-3' }} RON</div>
-      <div *ngIf="stock.qty">{{ stock.qty || 0 | number : '0.0-3' }} actiuni</div>
+      <div *ngIf="stock.qty">{{ stock.qty || 0 | number : '0.0-1' }} actiuni</div>
       @if(stock.toBuy! > 0){
       <div class="text-lime-500">
-        De cumparat: {{ stock.toBuy | number : '0.0-3' }} RON
+        De cumparat: {{ stock.toBuy | number : '0.0-1' }} RON
       </div>
       } @else if(stock.toBuy! < 0){
       <div class="text-blue-700">
-        Peste: {{ -1 * stock.toBuy! | number : '0.3-3' }} RON
+        Peste: {{ -1 * stock.toBuy! | number : '0.0-1' }} RON
       </div>
       }
     </div>
   </div>
   }
 </div>
-
-<!--  -->
