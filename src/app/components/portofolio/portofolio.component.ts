@@ -6,10 +6,11 @@ import { StocksComponent } from '../stocks/stocks.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { DetailedViewComponent } from '../detailed-view/detailed-view.component';
+import { HeaderComponent } from '../header/header.component';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule, DetailedViewComponent],
+  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule, DetailedViewComponent, HeaderComponent],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrl: './portofolio.component.scss',
@@ -17,9 +18,9 @@ import { DetailedViewComponent } from '../detailed-view/detailed-view.component'
 export class PortofolioComponent {
   dataset = new Array<any>();
   marketCap = 0;
+  chartView = true;
   appState = inject(AppStore);
   loading = true;
-  chartView = true;
 
   constructor() {
     effect(
@@ -43,10 +44,6 @@ export class PortofolioComponent {
 
   stocks(): Array<Stock> {
     return this.appState.$stocks() || [];
-  }
-
-  logOut(): void {
-    this.appState.logOut();
   }
 
   dropped(files: NgxFileDropEntry[]) {

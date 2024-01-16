@@ -5,3 +5,5 @@
 @import 'ngx-toastr/toastr';
 
 @import './assets/styles/ngx-charts.scss';
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

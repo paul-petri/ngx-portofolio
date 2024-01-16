@@ -1,0 +1,32 @@
+<header
+  class="bg-white shadow dark:bg-gray-800 flex items-center justify-between"
+>
+  <div class="px-4">
+    <button
+      (click)="swirchView()"
+      class="text-white bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+    >
+      @if (chartView) {Detailed View} @else { Chart View}
+    </button>
+  </div>
+  <div class="max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex">
+    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-white">
+      Market Cap : {{ marketCap | number : '0.0-3' }}
+    </h1>
+    <button
+      (click)="editIndex()"
+      class="text-white mx-4 bg-primary-600 from-pink-500 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r hover:from-pink-500 hover:to-yellow-500"
+    >
+      Editeaza Indicele
+    </button>
+  </div>
+  <div class="px-4">
+    <button
+      (click)="logOut()"
+      type="submit"
+      class="text-white bg-primary-600 hover:bg-primary-700 focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center dark:bg-primary-600 dark:hover:bg-primary-700 dark:focus:ring-primary-800 content-center"
+    >
+      <span>Log</span><span>out</span>
+    </button>
+  </div>
+</header>
