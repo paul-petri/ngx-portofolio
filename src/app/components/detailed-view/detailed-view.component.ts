@@ -8,11 +8,12 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { BET20map } from 'src/app/data/bet20map';
 import { FilterType } from 'src/app/models/filter-type.enum';
 import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
 import { FormsModule } from '@angular/forms';
+
+declare var gtag: any;
 
 @Component({
   selector: 'app-detailed-view',
@@ -63,6 +64,10 @@ export class DetailedViewComponent {
 
   toggleDD(): void {
     this.ddVisible.set(!this.ddVisible());
+    gtag('event', 'DETAILED_VIEW', {
+      'event_category': 'BUTTON_CLICK',
+      'event_label': 'DETAILED_VIEW',
+      'value': 'DETAILED VIEW CLICKED'   })
   }
 
   selectFilter(filter: FilterType): void {
@@ -77,7 +82,7 @@ export class DetailedViewComponent {
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
         stock,
-        BET20map.get(stock.symbol)?.proc || 1
+        this.appState.$betIndex().get(stock.symbol)?.proc || 1
       );
 
       const clone = { ...stock };
@@ -93,13 +98,13 @@ export class DetailedViewComponent {
   private addNonExistingStocks(): void {
     let newStocks: Stock[] = [];
 
-    for (let key of BET20map.keys()) {
+    for (let key of this.appState.$betIndex().keys()) {
       const exists = this.appState
         .$stocks()
         ?.some((stock: Stock) => stock.symbol === key);
 
       if (!exists) {
-        const bet = BET20map.get(key)!;
+        const bet = this.appState.$betIndex().get(key)!;
         newStocks.push({
           name: bet.name,
           symbol: bet.symbol,

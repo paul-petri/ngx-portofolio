@@ -26,14 +26,17 @@ export class AppStore {
     $user: signal<User | undefined>(undefined),
     $stocks: signal<Array<Stock> | undefined>(undefined),
     $loginError: signal<string>(''),
+    $betIndex: signal<Map<string, Stock>>(BET20map),
   };
 
 
   readonly $user = this.state.$user.asReadonly();
   readonly $stocks = this.state.$stocks.asReadonly();
   readonly $loginError = this.state.$loginError.asReadonly();
+  readonly $betIndex = this.state.$betIndex.asReadonly();
 
   constructor(private router: Router) {
+    this.initIndex();
     this.initWebSocket();
     this.onLoginChanges();
     this.checkStocks();
@@ -44,21 +47,6 @@ export class AppStore {
       this.state.$stocks.set(this.storage.getPorfotolio());
       this.router.navigate(['portofolio']);
     }
-  }
-
-  private onLoginChanges(): void {
-    effect(
-      () => {
-        if (this.$user()?.user && this.$user()?.password) {
-          if (this.$user()?.demo) {
-            this.logInDemo();
-            return;
-          }
-          this.logIn();
-        }
-      },
-      { allowSignalWrites: true }
-    );
   }
 
   logOut(): void {
@@ -80,6 +68,12 @@ export class AppStore {
 
   setUser(user: User | undefined): void {
     this.state.$user.set(user);
+  }
+
+  setBetIndex(betIndex: Map<string, Stock>): void {
+    this.state.$betIndex.set(betIndex);
+    this.storage.saveBetIndex(betIndex);
+    this.updateStocksOnBetIndexChange();
   }
 
   setLoginError(error: string): void {
@@ -121,7 +115,7 @@ export class AppStore {
             return;
           }
         } else if (idx > 1) {
-          const betStock = BET20map.get(data[0]);
+          const betStock = this.$betIndex().get(data[0]);
           if (betStock) {
             myPortofolio.push({
               symbol: data[0],
@@ -150,7 +144,7 @@ export class AppStore {
     const myPortofolio: Array<Stock> = [];
 
     data.Symbol.forEach((symbol: string, idx: number) => {
-      const betStock = BET20map.get(symbol);
+      const betStock = this.$betIndex().get(symbol);
       if (betStock) {
         myPortofolio.push({
           symbol,
@@ -165,6 +159,47 @@ export class AppStore {
     });
     this.state.$stocks.set(myPortofolio);
     this.router.navigate(['/portofolio']);
+  }
+
+  private updateStocksOnBetIndexChange(): void {
+    const newStocks = new Array<Stock>();
+    this.$stocks()?.forEach((stock: Stock) => {
+      const betStock = this.$betIndex().get(stock.symbol);
+      if (betStock) {
+        newStocks.push({
+          symbol: stock.symbol,
+          name: betStock.name,
+          proc: 1,
+          qty: stock.qty,
+          value: stock.value,
+          type: StockType.BET,
+          betProc: betStock.proc,
+        });
+      }
+    });
+    this.state.$stocks.set(newStocks);
+    this.storage.savePortofolio(newStocks);
+  }
+
+  private onLoginChanges(): void {
+    effect(
+      () => {
+        if (this.$user()?.user && this.$user()?.password) {
+          if (this.$user()?.demo) {
+            this.logInDemo();
+            return;
+          }
+          this.logIn();
+        }
+      },
+      { allowSignalWrites: true }
+    );
+  }
+
+  private initIndex(): void {
+    if(this.storage.getBetIndex()) {
+      this.state.$betIndex.set(this.storage.getBetIndex() || BET20map);
+    }
   }
 
   private initWebSocket(): void {
@@ -228,7 +263,7 @@ export class AppStore {
     }
 
     myPortofolio.forEach((stock: Stock) => {
-      const betStock = BET20map.get(stock.symbol);
+      const betStock = this.$betIndex().get(stock.symbol);
       if (betStock) {
         betPortofilio.push({
           symbol: stock.symbol,

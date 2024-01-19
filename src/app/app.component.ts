@@ -1,7 +1,7 @@
 import {Component, inject} from '@angular/core';
-import {AppStore} from './services/app.store';
 import { NavigationEnd, Router } from '@angular/router';
 import { filter } from 'rxjs';
+import { StorageService } from './services/storage.service';
 
 declare const gtag: Function;
 
@@ -11,7 +11,7 @@ declare const gtag: Function;
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  appStore = inject(AppStore);
+  storage = inject(StorageService);
 
   constructor(private router: Router) {
        /** START : Code to Track Page View using gtag.js */
@@ -23,5 +23,7 @@ export class AppComponent {
          })
         })
         /** END : Code to Track Page View  using gtag.js */
+
+        this.storage.checkVersion();
   }
 }

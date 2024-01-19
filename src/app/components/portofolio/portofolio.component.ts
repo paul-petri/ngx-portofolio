@@ -1,5 +1,4 @@
-import { Component, computed, effect, inject, signal } from '@angular/core';
-import { BET20map } from 'src/app/data/bet20map';
+import { Component, effect, inject } from '@angular/core';
 import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
 import { StocksComponent } from '../stocks/stocks.component';
@@ -19,9 +18,10 @@ export class PortofolioComponent {
   dataset = new Array<any>();
   marketCap = 0;
   chartView = true;
-  appState = inject(AppStore);
   loading = true;
-
+  
+  appState = inject(AppStore);
+  
   constructor() {
     effect(
       () => {
@@ -71,7 +71,7 @@ export class PortofolioComponent {
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
         stock,
-        BET20map.get(stock.symbol)?.proc || 1
+        this.appState.$betIndex().get(stock.symbol)?.proc || 1
       );
 
       this.dataset.push({
@@ -91,19 +91,20 @@ export class PortofolioComponent {
   private addNonExistingStocks(): void {
     let newStocks: Stock[] = [];
 
-    for (let key of BET20map.keys()) {
+    for (let key of this.appState.$betIndex().keys()) {
       const exists = this.appState
         .$stocks()
         ?.some((stock: Stock) => stock.symbol === key);
 
       if (!exists) {
-        const bet = BET20map.get(key)!;
+        const bet = this.appState.$betIndex().get(key)!;
         this.dataset.push({
           name: bet.symbol,
           value: this.getStockBuyValue(bet, bet.proc),
         });
         newStocks.push({
           name: bet.name,
+          betProc: bet.proc,
           symbol: bet.symbol,
           qty: 0,
           toBuy: this.getStockBuyValue(bet, bet.proc),

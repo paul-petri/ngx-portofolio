@@ -1,8 +1,47 @@
 <div class="h-full dark:bg-gray-900">
-
-  <app-header [marketCap]="marketCap" [(chartView)]="chartView"/>
+  <app-header [marketCap]="marketCap" [(chartView)]="chartView" />
 
   @if (chartView) {
+  <div class="lg:mx-36 pt-20">
+    <ngx-file-drop
+      accept=".csv"
+      dropZoneLabel="Drop files here"
+      (onFileDrop)="dropped($event)"
+    >
+      <ng-template
+        ngx-file-drop-content-tmp
+        let-openFileSelector="openFileSelector"
+      >
+        <button type="button" (click)="openFileSelector()">
+          Faceti click aici pentru a incarca fisierul .CSV si sa folositi date reale.
+        </button>
+      </ng-template>
+    </ngx-file-drop>
+  </div>
+
+  <p class="dark:text-white p-6 lg:mx-36 inline-block">
+    Pentru a face download fisierului .CSV accesati
+    <a
+      href=" https://portal.tradeville.ro/mytv/mytv.htm"
+      target="_blank"
+      class="text-lime-500"
+    >
+      portal.tradeville.ro
+    </a>
+    la sectiunea Portofoliu -> Optiuni -> Raport CSV.
+
+    <span class="group relative">
+      <span class="text-lg font-bold text-lime-500"
+        >Aveti aici exemplu, functioneaza si cu raport CSV din portal.</span
+      >
+      <img
+        src="assets/img/csv-file.png"
+        alt="Your Image"
+        class="absolute top-0 left-100 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
+      />
+    </span>
+  </p>
+  } @if (chartView) {
   <div class="chart">
     <p class="dark:text-white p-6 lg:mx-36 inline-block">
       In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0,
@@ -35,42 +74,4 @@
   } @else {
   <app-detailed-view [marketCap]="marketCap" class="w-full block text-center" />
   }
-
-  <p class="dark:text-white p-6 lg:mx-36 inline-block">
-    Pentru a face download fisierului .CSV accesati
-    <a
-      href=" https://portal.tradeville.ro/mytv/mytv.htm"
-      target="_blank"
-      class="text-lime-500"
-    >
-      portal.tradeville.ro
-    </a>
-    la sectiunea Portofoliu -> Optiuni -> Raport CSV.
-
-    <span class="group relative">
-      <span class="text-lg font-bold">Hover over me</span>
-      <img
-        src="assets/img/csv-file.png"
-        alt="Your Image"
-        class="absolute top-0 left-100 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
-      />
-    </span>
-  </p>
-
-  <div class="lg:mx-36 pb-20">
-    <ngx-file-drop
-      accept=".csv"
-      dropZoneLabel="Drop files here"
-      (onFileDrop)="dropped($event)"
-    >
-      <ng-template
-        ngx-file-drop-content-tmp
-        let-openFileSelector="openFileSelector"
-      >
-        <button type="button" (click)="openFileSelector()">
-          Click here to upload csv file from your portofolio.
-        </button>
-      </ng-template>
-    </ngx-file-drop>
-  </div>
 </div>
