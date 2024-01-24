@@ -1,52 +1,23 @@
 <div class="h-full dark:bg-gray-900">
   <app-header [marketCap]="marketCap" [(chartView)]="chartView" />
-
-  @if (chartView) {
-  <div class="lg:mx-36 pt-20">
-    <ngx-file-drop
-      accept=".csv"
-      dropZoneLabel="Drop files here"
-      (onFileDrop)="dropped($event)"
+  <div class="flex justify-center items-center mt-6">
+    <button
+      (click)="uploadFileModal()"
+      class="rounded inline-flex items-center text-white bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
     >
-      <ng-template
-        ngx-file-drop-content-tmp
-        let-openFileSelector="openFileSelector"
-      >
-        <button type="button" (click)="openFileSelector()">
-          Faceti click aici pentru a incarca fisierul .CSV si sa folositi date reale.
-        </button>
-      </ng-template>
-    </ngx-file-drop>
+      <img src="assets/img/upload-file.svg" class="w-4 h-4 mr-2 icon-white" alt="Upload">
+      Adauga portofoliul tau
+    </button>
   </div>
 
-  <p class="dark:text-white p-6 lg:mx-36 inline-block">
-    Pentru a face download fisierului .CSV accesati
-    <a
-      href=" https://portal.tradeville.ro/mytv/mytv.htm"
-      target="_blank"
-      class="text-lime-500"
-    >
-      portal.tradeville.ro
-    </a>
-    la sectiunea Portofoliu -> Optiuni -> Raport CSV.
-
-    <span class="group relative">
-      <span class="text-lg font-bold text-lime-500"
-        >Aveti aici exemplu, functioneaza si cu raport CSV din portal.</span
-      >
-      <img
-        src="assets/img/csv-file.png"
-        alt="Your Image"
-        class="absolute top-0 left-100 hidden h-auto opacity-0 group-hover:opacity-100 transition-opacity min-w-60rem"
-      />
-    </span>
-  </p>
-  } @if (chartView) {
+  @if (chartView) {
   <div class="chart">
     <p class="dark:text-white p-6 lg:mx-36 inline-block">
-      In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0,
-      ce este peste inseamna ca e nevoie sa cumperi de acea suma, ce este sub
-      inseamna ca ai o detinere prea mare.
+      In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0
+      <span class="dark:text-lime-500 font-bold ml-2"> + </span> 
+      inseamna ca ai o detinere prea mare  
+      <span class="dark:text-lime-500 font-bold ml-2"> - </span> 
+      ca trebuie sa cumperi de acea suma.
     </p>
 
     @if (loading) {
@@ -56,15 +27,16 @@
       <div class="min-h-full sm:px-6 dark-chart" *ngIf="!loading">
         <ngx-charts-bar-vertical
           [results]="dataset"
-          [xAxisLabel]="'x-axis'"
+          [xAxisLabel]="''"
           [legendTitle]="'legend'"
-          [yAxisLabel]="'y-axis'"
+          [yAxisLabel]="'Valoare RON'"
           [legend]="true"
           [showXAxisLabel]="true"
           [showYAxisLabel]="true"
           [xAxis]="true"
           [yAxis]="true"
           [gradient]="true"
+          [showDataLabel]="true"
         >
         </ngx-charts-bar-vertical>
       </div>

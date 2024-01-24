@@ -3,13 +3,14 @@ import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
 import { StocksComponent } from '../stocks/stocks.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
-import { NgxFileDropModule, NgxFileDropEntry } from 'ngx-file-drop';
 import { DetailedViewComponent } from '../detailed-view/detailed-view.component';
 import { HeaderComponent } from '../header/header.component';
+import { MatDialog } from '@angular/material/dialog';
+import { UploadModalComponent } from '../modals/upload-modal/upload-modal.component';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent, NgxChartsModule, NgxFileDropModule, DetailedViewComponent, HeaderComponent],
+  imports: [StocksComponent, NgxChartsModule, DetailedViewComponent, HeaderComponent, UploadModalComponent],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrl: './portofolio.component.scss',
@@ -21,6 +22,7 @@ export class PortofolioComponent {
   loading = true;
   
   appState = inject(AppStore);
+  dialog = inject(MatDialog);
   
   constructor() {
     effect(
@@ -46,20 +48,8 @@ export class PortofolioComponent {
     return this.appState.$stocks() || [];
   }
 
-  dropped(files: NgxFileDropEntry[]) {
-    for (const droppedFile of files) {
-      // Is it a file?
-      if (droppedFile.fileEntry.isFile) {
-        const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
-        fileEntry.file((file: File) => {
-          this.parseCSV(file);
-        });
-      }
-    }
-  }
-
-  parseCSV(file: File): void {
-    this.appState.mapCSVToStocks(file);
+  uploadFileModal(): void {
+    this.dialog.open(UploadModalComponent);
   }
 
   private setChartData(): void {
@@ -123,7 +113,7 @@ export class PortofolioComponent {
 
     const toBuyProc = betProc - stock.cProc;
 
-    return (toBuyProc * stock.value) / stock.cProc;
+    return -1 * (toBuyProc * stock.value) / stock.cProc;
   }
 
   private setStockProcentPerMarket(stocks: Array<Stock>): void {

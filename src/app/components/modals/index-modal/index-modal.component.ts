@@ -55,8 +55,5 @@ export class IndexModalComponent {
         const redistributionShare = stock.proc / totalPercentage;
         stock.proc += redistributionShare * removedStock.proc;
     });
-
-    console.log(this.stocks);
-    
   }
 }
