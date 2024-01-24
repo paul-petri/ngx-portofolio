@@ -7,10 +7,11 @@ import { DetailedViewComponent } from '../detailed-view/detailed-view.component'
 import { HeaderComponent } from '../header/header.component';
 import { MatDialog } from '@angular/material/dialog';
 import { UploadModalComponent } from '../modals/upload-modal/upload-modal.component';
+import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent, NgxChartsModule, DetailedViewComponent, HeaderComponent, UploadModalComponent],
+  imports: [StocksComponent, RouterModule, NgxChartsModule, DetailedViewComponent, HeaderComponent, UploadModalComponent],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrl: './portofolio.component.scss',

@@ -8,10 +8,20 @@
       <img src="assets/img/upload-file.svg" class="w-4 h-4 mr-2 icon-white" alt="Upload">
       Adauga portofoliul tau
     </button>
+    
+    <div class="ml-3 items-center dark:text-white sm:flex md:hidden" [routerLink]="['/info']" >
+      Info
+      <img
+        src="assets/img/info.svg"
+        class="w-6 h-6 ml-3 h-30px w-30px cursor-pointer icon-white"
+        alt="Info"
+      />
+    </div>
   </div>
 
   @if (chartView) {
   <div class="chart">
+    
     <p class="dark:text-white p-6 lg:mx-36 inline-block">
       In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0
       <span class="dark:text-lime-500 font-bold ml-2"> + </span> 
