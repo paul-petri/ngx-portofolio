@@ -4,7 +4,7 @@
   <div class="px-4">
     <button
       (click)="swirchView()"
-      class="text-white inline-flex items-center bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+      class="text-white inline-flex items-center bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-500 hover:to-yellow-500 sm:pr-35-px"
     >
       @if (chartView) {
         <img
@@ -12,25 +12,24 @@
           class="w-4 h-4 mr-2 icon-white"
           alt="Upload"
         />
-        Pagina detaliata
+        <span class="sm:mr-2">Pagina detaliata</span>
       } @else { 
         <img
           src="assets/img/chart.svg"
           class="w-4 h-4 mr-2 icon-white"
           alt="Upload"
         />
-        Vezi grafic 
+        <span class="sm:mr-2">Vezi grafic</span>
       }</button
     >
   </div>
-  <div class="max-w-7xl px-4 py-6 sm:px-6 lg:px-8 flex">
+  <div class="max-w-7xl md:px-4 lg:px-8 flex">
     <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-blue-600">
-       Total : <span class="dark:text-lime-500">{{ marketCap | number : '0.0-3' }} RON</span>
+       Total : <span class="dark:text-lime-500">{{ marketCap | number : '1.0-0' }} RON</span>
     </h1>
     <div class="ml-7 items-center dark:text-white hidden sm:flex" [routerLink]="['/info']" >
       Info
       <img
-        
         src="assets/img/info.svg"
         class="w-6 h-6 ml-3 h-30px w-30px cursor-pointer icon-white"
         alt="Info"
@@ -39,11 +38,9 @@
     
   </div>
 
-  <div class="px-4 relative">
+  <div class="md:px-4 relative">
     <button
-      id="dropdownBgHoverButton"
-      data-dropdown-toggle="dropdownBgHover"
-      class="my-3 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center sm:dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="cursor-pointer my-3 dark:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center"
       type="button"
       (click)="toggleMenu()"
     >
@@ -56,17 +53,17 @@
     </button>
     <div
       *ngIf="menuOpen"
-      class="origin-top-left absolute rounded-md ring-1 ring-black ring-opacity-5 bg-white rounded-lg dark:bg-gray-700 -mx-28 w-56"
+      class="origin-top-left z-10 fixed rounded-md ring-1 ring-black ring-opacity-5 bg-white rounded-lg dark:bg-gray-700 -mx-28 w-56"
     >
-    <div
-      class="py-1"
-      role="menu"
-      aria-orientation="vertical"
-      aria-labelledby="options-menu"
-    >
-      <div (click)="editIndex()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Editeaza Indicele</div>
-      <div (click)="logOut()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Log Out</div>
-    </div>
+      <div
+        class="py-1"
+        role="menu"
+        aria-orientation="vertical"
+        aria-labelledby="options-menu"
+      >
+        <div (click)="editIndex()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Editeaza Indicele</div>
+        <div (click)="logOut()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Log Out</div>
+      </div>
   </div>
   </div>
 

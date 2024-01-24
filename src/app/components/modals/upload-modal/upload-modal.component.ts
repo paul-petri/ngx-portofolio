@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 import { NgxFileDropEntry, NgxFileDropModule } from 'ngx-file-drop';
 import { AppStore } from 'src/app/services/app.store';
 
@@ -14,6 +14,7 @@ import { AppStore } from 'src/app/services/app.store';
 })
 export class UploadModalComponent {
   appState = inject(AppStore);
+  dialog = inject(MatDialog);
 
   dropped(files: NgxFileDropEntry[]) {
     for (const droppedFile of files) {
@@ -21,6 +22,7 @@ export class UploadModalComponent {
         const fileEntry = droppedFile.fileEntry as FileSystemFileEntry;
         fileEntry.file((file: File) => {
             this.appState.mapCSVToStocks(file);
+            this.dialog.closeAll();
         });
       }
     }

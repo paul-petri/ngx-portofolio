@@ -43,13 +43,12 @@
           >
             <span class="flex items-center">
               <span>{{ $index + 1 }}.&nbsp;</span>
-              <span>{{ stock.name }}</span>
+              <span class="hidden sm:block">{{ stock.name }}</span>
               <span>
-                [<span class="text-blue-600">{{ stock.symbol }}</span>
-                ] :
+                [<span class="text-blue-600">{{ stock.symbol }}</span>] :
               </span>
               <span class="text-lime-500"
-                >{{ stock.proc | number : '0.0-1' }}%</span
+                > {{ stock.proc | number : '0.0-1' }}%</span
               >
             </span>
             <span>

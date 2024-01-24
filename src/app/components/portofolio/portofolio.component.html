@@ -8,15 +8,19 @@
       <img src="assets/img/upload-file.svg" class="w-4 h-4 mr-2 icon-white" alt="Upload">
       Adauga portofoliul tau
     </button>
-    
-    <div class="ml-3 items-center dark:text-white sm:flex md:hidden" [routerLink]="['/info']" >
+
+    <button
+      class="flex md:hidden ml-2 my-3 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      type="button"
+      [routerLink]="['/info']"
+    >
       Info
       <img
         src="assets/img/info.svg"
         class="w-6 h-6 ml-3 h-30px w-30px cursor-pointer icon-white"
         alt="Info"
       />
-    </div>
+    </button>
   </div>
 
   @if (chartView) {
@@ -27,7 +31,7 @@
       <span class="dark:text-lime-500 font-bold ml-2"> + </span> 
       inseamna ca ai o detinere prea mare  
       <span class="dark:text-lime-500 font-bold ml-2"> - </span> 
-      ca trebuie sa cumperi de acea suma.
+       trebuie sa cumperi de acea suma.
     </p>
 
     @if (loading) {
