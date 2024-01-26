@@ -121,8 +121,6 @@ export class DetailedViewComponent {
       }
     }
     this.detailedStocks.update((stocks) => stocks.concat(newStocks));
-    console.log(this.detailedStocks());
-    
   }
 
   private getStockBuyValue(stock: Stock, betProc: number): number {
