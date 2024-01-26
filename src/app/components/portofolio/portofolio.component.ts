@@ -67,7 +67,7 @@ export class PortofolioComponent {
 
       this.dataset.push({
         name: stock.symbol,
-        value,
+        value: Math.trunc(value),
       });
       const clone = { ...stock };
       clone.toBuy = value;
@@ -113,8 +113,9 @@ export class PortofolioComponent {
     }
 
     const toBuyProc = betProc - stock.cProc;
-
-    return -1 * (toBuyProc * stock.value) / stock.cProc;
+    const toBuy = (toBuyProc * stock.value) / stock.cProc;
+    
+    return -1 * (toBuy + (toBuy * stock.betProc! / 100));
   }
 
   private setStockProcentPerMarket(stocks: Array<Stock>): void {

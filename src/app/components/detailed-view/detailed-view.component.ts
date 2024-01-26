@@ -12,6 +12,7 @@ import { FilterType } from 'src/app/models/filter-type.enum';
 import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
 import { FormsModule } from '@angular/forms';
+import { GeneralInfo } from 'src/app/models/general-info';
 
 declare var gtag: any;
 
@@ -30,11 +31,12 @@ export class DetailedViewComponent {
   sortByBuy = signal(false);
   ddVisible = signal(false);
   selectedFilter = signal(FilterType.ALL);
-  detailedSrocks = signal(new Array<Stock>());
+  detailedStocks = signal(new Array<Stock>());
+  generalInfo = signal<GeneralInfo>({totalToBuy: 0, totalOver: 0, noOwnings: 0});
 
   filterSrocks = computed(() => {
     const filter = this.selectedFilter();
-    const stocks = this.detailedSrocks();
+    const stocks = this.detailedStocks();
 
     if(this.sortByBuy())  {
       stocks.sort((a, b) => b.toBuy! - a.toBuy!);
@@ -76,7 +78,7 @@ export class DetailedViewComponent {
   }
 
   private setStocks(): void {
-    this.detailedSrocks.set([]);
+    this.detailedStocks.set([]);
     let newStocks = new Array<Stock>();
     
     this.appState.$stocks()?.forEach((stock: Stock) => {
@@ -91,8 +93,9 @@ export class DetailedViewComponent {
       newStocks.push(clone);
     });
 
-    this.detailedSrocks.set(newStocks);
+    this.detailedStocks.set(newStocks);
     this.addNonExistingStocks();
+    this.setGeneralInfo();
   }
 
   private addNonExistingStocks(): void {
@@ -117,7 +120,9 @@ export class DetailedViewComponent {
         });
       }
     }
-    this.detailedSrocks.update((stocks) => stocks.concat(newStocks));
+    this.detailedStocks.update((stocks) => stocks.concat(newStocks));
+    console.log(this.detailedStocks());
+    
   }
 
   private getStockBuyValue(stock: Stock, betProc: number): number {
@@ -126,8 +131,29 @@ export class DetailedViewComponent {
     }
 
     const toBuyProc = betProc - stock.cProc;
+    const toBuy = (toBuyProc * stock.value) / stock.cProc;
+    
+    return toBuy + (toBuy * stock.betProc! / 100);
+  }
 
-    return (toBuyProc * stock.value) / stock.cProc;
+  private setGeneralInfo(): void {   
+    let totalToBuy = 0;
+    let totalOver = 0;
+    let noOwnings = 0;
+
+    this.detailedStocks().forEach((stock: Stock) => {
+      if(stock.qty! === 0) {
+        noOwnings++;
+      }
+
+      if(stock.toBuy! > 0) {
+        totalToBuy += stock.toBuy!;
+      } else {
+        totalOver += stock.toBuy!;
+      }
+    });
+
+    this.generalInfo.set({totalToBuy, totalOver, noOwnings});
   }
 
 

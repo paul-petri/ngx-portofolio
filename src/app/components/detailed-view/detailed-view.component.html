@@ -68,6 +68,27 @@
 </div>
 
 <div class="flex flex-wrap justify-center">
+  <div
+    class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700"
+  >
+    <h5
+      class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white break-keep"
+    >
+      <span class="text-lime-500"> Informatii generale </span>
+    </h5>
+    <div class="font-normal text-gray-700 dark:text-gray-400">
+      <div class="text-lime-500">
+        Total de cumparat: {{generalInfo().totalToBuy | number : '0.0-1' }} RON
+      </div>
+      <div class="text-blue-700">
+        Total Peste: {{ -1 * generalInfo().totalOver | number : '0.0-1' }} RON
+      </div>
+      <div> 
+        Companii cu 0 detineri: {{ generalInfo().noOwnings }}
+      </div>
+    </div>
+  </div>
+
   @for (stock of filterSrocks(); track $index) {
 
   <div
