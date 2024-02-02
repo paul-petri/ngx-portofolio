@@ -91,7 +91,7 @@ export class PortofolioComponent {
         const bet = this.appState.$betIndex().get(key)!;
         this.dataset.push({
           name: bet.symbol,
-          value: this.getStockBuyValue(bet, bet.proc),
+          value: Math.trunc(this.getStockBuyValue(bet, bet.proc)),
         });
         newStocks.push({
           name: bet.name,
@@ -109,7 +109,7 @@ export class PortofolioComponent {
 
   private getStockBuyValue(stock: Stock, betProc: number): number {
     if (!stock.value || !stock.cProc) {
-      return (betProc / 100) * this.marketCap;
+      return -1 * (betProc / 100) * this.marketCap;
     }
 
     const toBuyProc = betProc - stock.cProc;
