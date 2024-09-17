@@ -1,5 +1,5 @@
-import {Stock} from '../models/stock';
-import {StockType} from '../models/stock-type';
+import { Stock } from '../models/stock';
+import { StockType } from '../models/stock-type';
 
 export const BET20map: Map<string, Stock> = new Map([
   [
@@ -7,7 +7,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'TLV',
       name: 'Banca Transilvania',
-      proc: 19.63,
+      proc: 20.03, 
       qty: 0,
       type: StockType.BET,
     },
@@ -17,7 +17,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'SNP',
       name: 'OMV Petrom',
-      proc: 19.23,
+      proc: 19.24, 
       qty: 0,
       type: StockType.BET,
     },
@@ -27,7 +27,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'H2O',
       name: 'Hidroelectrica',
-      proc: 15.17,
+      proc: 15.26, 
       qty: 0,
       type: StockType.BET,
     },
@@ -37,7 +37,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'SNG',
       name: 'Romgaz',
-      proc: 9.25,
+      proc: 8.99, 
       qty: 0,
       type: StockType.BET,
     },
@@ -47,7 +47,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'BRD',
       name: 'BRD',
-      proc: 7.96,
+      proc: 7.98, 
       qty: 0,
       type: StockType.BET,
     },
@@ -57,7 +57,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'SNN',
       name: 'Nuclear Electrica',
-      proc: 3.76,
+      proc: 3.58, 
       qty: 0,
       type: StockType.BET,
     },
@@ -67,7 +67,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'EL',
       name: 'Electrica',
-      proc: 3.73,
+      proc: 3.53, 
       qty: 0,
       type: StockType.BET,
     },
@@ -77,8 +77,8 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'DIGI',
       name: 'Digi',
+      proc: 3.81, 
       qty: 0,
-      proc: 3.36,
       type: StockType.BET,
     },
   ],
@@ -87,7 +87,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'TGN',
       name: 'Transgaz',
-      proc: 3.05,
+      proc: 3.09, 
       qty: 0,
       type: StockType.BET,
     },
@@ -97,7 +97,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'M',
       name: 'Medlife',
-      proc: 2.97,
+      proc: 3.15, 
       qty: 0,
       type: StockType.BET,
     },
@@ -107,7 +107,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'ONE',
       name: 'One United',
-      proc: 2.19,
+      proc: 2.06, 
       qty: 0,
       type: StockType.BET,
     },
@@ -117,7 +117,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'TEL',
       name: 'Transelectrica',
-      proc: 1.93,
+      proc: 1.66, 
       qty: 0,
       type: StockType.BET,
     },
@@ -127,7 +127,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'FP',
       name: 'Fondul Proprietatea',
-      proc: 1.83,
+      proc: 1.85, 
       qty: 0,
       type: StockType.BET,
     },
@@ -137,7 +137,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'TTS',
       name: 'Transport Trade Services',
-      proc: 1.36,
+      proc: 1.36, // No change
       qty: 0,
       type: StockType.BET,
     },
@@ -147,7 +147,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'AQ',
       name: 'Aquila',
-      proc: 1.09,
+      proc: 1.19, 
       qty: 0,
       type: StockType.BET,
     },
@@ -157,7 +157,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'TRP',
       name: 'TERRAPLAST',
-      proc: 0.89,
+      proc: 0.89, // No change
       qty: 0,
       type: StockType.BET,
     },
@@ -167,7 +167,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'SFG',
       name: 'Sphera',
-      proc: 0.84,
+      proc: 0.86, 
       qty: 0,
       type: StockType.BET,
     },
@@ -177,7 +177,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'BVB',
       name: 'Bursa Valori Bucuresti',
-      proc: 0.69,
+      proc: 0.63, 
       qty: 0,
       type: StockType.BET,
     },
@@ -187,7 +187,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'WINE',
       name: 'Purcari',
-      proc: 0.68,
+      proc: 0.67, 
       qty: 0,
       type: StockType.BET,
     },
@@ -197,7 +197,7 @@ export const BET20map: Map<string, Stock> = new Map([
     {
       symbol: 'COTE',
       name: 'Conpet',
-      proc: 0.40,
+      proc: 0.37, 
       qty: 0,
       type: StockType.BET,
     },
