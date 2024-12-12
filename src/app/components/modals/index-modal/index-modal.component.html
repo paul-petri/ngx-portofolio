@@ -37,7 +37,7 @@
       <!-- Modal body -->
       <div mat-dialog-content class="p-4 md:p-5 space-y-4">
         <div class="text-base leading-relaxed text-gray-500 dark:text-gray-400">
-          @for (stock of stocks; track $index) {
+          @for (stock of visibleStocks(); track $index) {
           <div
             class="px-4 flex justify-between hover:bg-gray-200 dark:hover:bg-gray-600 p-x"
           >
@@ -55,7 +55,7 @@
               <button
                 type="button"
                 class="text-gray-400 bg-transparent hover:text-gray-900 rounded-lg text-sm w-8 h-8 ms-auto inline-flex justify-center items-center dark:hover:bg-gray-600 dark:hover:text-red-600"
-                (click)="removeStock($index)"
+                (click)="removeStock(stock.symbol)"
               >
                 <svg
                   class="w-3 h-3"

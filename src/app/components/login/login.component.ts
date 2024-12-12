@@ -1,5 +1,5 @@
-import {Component, computed, effect, inject, signal} from '@angular/core';
-import {AppStore} from 'src/app/services/app.store';
+import { Component, effect, inject } from '@angular/core';
+import { AppStore } from 'src/app/services/app.store';
 
 @Component({
   selector: 'app-login',
@@ -28,7 +28,7 @@ export class LoginComponent {
       return;
     }
 
-    this.appState.setUser({user: this.userName, password: this.password});
+    this.appState.setUser({ user: this.userName, password: this.password });
   }
 
   logInDemo(): void {

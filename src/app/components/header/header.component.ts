@@ -6,7 +6,6 @@ import {
   Input,
   Output,
   inject,
-  signal,
 } from '@angular/core';
 import { AppStore } from 'src/app/services/app.store';
 import { MatDialog, MatDialogModule } from '@angular/material/dialog';
@@ -17,7 +16,7 @@ import { RouterModule } from '@angular/router';
   selector: 'app-header',
   standalone: true,
   templateUrl: './header.component.html',
-  imports: [CommonModule, RouterModule, MatDialogModule, IndexModalComponent],
+  imports: [CommonModule, RouterModule, MatDialogModule],
   styleUrls: ['./header.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -31,7 +30,7 @@ export class HeaderComponent {
 
   menuOpen = false;
 
-  swirchView(): void {
+  switchView(): void {
     this.chartView = !this.chartView;
     this.chartViewChange.emit(this.chartView);
   }

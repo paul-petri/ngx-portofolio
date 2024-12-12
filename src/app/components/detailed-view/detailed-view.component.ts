@@ -32,15 +32,19 @@ export class DetailedViewComponent {
   ddVisible = signal(false);
   selectedFilter = signal(FilterType.ALL);
   detailedStocks = signal(new Array<Stock>());
-  generalInfo = signal<GeneralInfo>({totalToBuy: 0, totalOver: 0, noOwnings: 0});
+  generalInfo = signal<GeneralInfo>({
+    totalToBuy: 0,
+    totalOver: 0,
+    noOwnings: 0,
+  });
 
   filterSrocks = computed(() => {
     const filter = this.selectedFilter();
     const stocks = this.detailedStocks();
 
-    if(this.sortByBuy())  {
+    if (this.sortByBuy()) {
       stocks.sort((a, b) => b.toBuy! - a.toBuy!);
-    } else {  
+    } else {
       stocks.sort((a, b) => b.betProc! - a.betProc!);
     }
 
@@ -48,7 +52,9 @@ export class DetailedViewComponent {
       return stocks;
     }
 
-    return stocks.filter((stock: Stock) => filter === FilterType.TO_BUY ? stock.toBuy! > 0 : stock.toBuy! < 0);
+    return stocks.filter((stock: Stock) =>
+      filter === FilterType.TO_BUY ? stock.toBuy! > 0 : stock.toBuy! < 0
+    );
   });
 
   appState = inject(AppStore);
@@ -67,9 +73,10 @@ export class DetailedViewComponent {
   toggleDD(): void {
     this.ddVisible.set(!this.ddVisible());
     gtag('event', 'DETAILED_VIEW', {
-      'event_category': 'BUTTON_CLICK',
-      'event_label': 'DETAILED_VIEW',
-      'value': 'DETAILED VIEW CLICKED'   })
+      event_category: 'BUTTON_CLICK',
+      event_label: 'DETAILED_VIEW',
+      value: 'DETAILED VIEW CLICKED',
+    });
   }
 
   selectFilter(filter: FilterType): void {
@@ -80,7 +87,7 @@ export class DetailedViewComponent {
   private setStocks(): void {
     this.detailedStocks.set([]);
     let newStocks = new Array<Stock>();
-    
+
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
         stock,
@@ -94,7 +101,7 @@ export class DetailedViewComponent {
     });
 
     this.detailedStocks.set(newStocks);
-    this.addNonExistingStocks();
+    // this.addNonExistingStocks();
     this.setGeneralInfo();
   }
 
@@ -112,7 +119,7 @@ export class DetailedViewComponent {
           name: bet.name,
           symbol: bet.symbol,
           qty: 0,
-          toBuy: this.getStockBuyValue(bet, bet.proc),
+          toBuy: this.getStockBuyValue(bet as any, bet.proc),
           value: 0,
           proc: 0,
           type: bet.type,
@@ -130,29 +137,27 @@ export class DetailedViewComponent {
 
     const toBuyProc = betProc - stock.cProc;
     const toBuy = (toBuyProc * stock.value) / stock.cProc;
-    
-    return toBuy + (toBuy * stock.betProc! / 100);
+
+    return toBuy + (toBuy * stock.betProc!) / 100;
   }
 
-  private setGeneralInfo(): void {   
+  private setGeneralInfo(): void {
     let totalToBuy = 0;
     let totalOver = 0;
     let noOwnings = 0;
 
     this.detailedStocks().forEach((stock: Stock) => {
-      if(stock.qty! === 0) {
+      if (stock.qty! === 0) {
         noOwnings++;
       }
 
-      if(stock.toBuy! > 0) {
+      if (stock.toBuy! > 0) {
         totalToBuy += stock.toBuy!;
       } else {
         totalOver += stock.toBuy!;
       }
     });
 
-    this.generalInfo.set({totalToBuy, totalOver, noOwnings});
+    this.generalInfo.set({ totalToBuy, totalOver, noOwnings });
   }
-
-
 }

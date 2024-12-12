@@ -1,7 +1,6 @@
 import { Component, effect, inject } from '@angular/core';
 import { Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
-import { StocksComponent } from '../stocks/stocks.component';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DetailedViewComponent } from '../detailed-view/detailed-view.component';
 import { HeaderComponent } from '../header/header.component';
@@ -11,7 +10,12 @@ import { RouterModule } from '@angular/router';
 
 @Component({
   standalone: true,
-  imports: [StocksComponent, RouterModule, NgxChartsModule, DetailedViewComponent, HeaderComponent, UploadModalComponent],
+  imports: [
+    RouterModule,
+    NgxChartsModule,
+    DetailedViewComponent,
+    HeaderComponent,
+  ],
   selector: 'app-portofolio',
   templateUrl: './portofolio.component.html',
   styleUrl: './portofolio.component.scss',
@@ -21,10 +25,10 @@ export class PortofolioComponent {
   marketCap = 0;
   chartView = true;
   loading = true;
-  
+
   appState = inject(AppStore);
   dialog = inject(MatDialog);
-  
+
   constructor() {
     effect(
       () => {
@@ -54,14 +58,13 @@ export class PortofolioComponent {
   }
 
   private setChartData(): void {
-   
     this.setStockProcentPerMarket(this.appState.$stocks()!);
 
     let newStocks = new Array<Stock>();
 
     this.appState.$stocks()?.forEach((stock: Stock) => {
       const value = this.getStockBuyValue(
-        stock,
+        stock.symbol,
         this.appState.$betIndex().get(stock.symbol)?.proc || 1
       );
 
@@ -75,7 +78,7 @@ export class PortofolioComponent {
       newStocks.push(clone);
     });
 
-    this.addNonExistingStocks();
+    // this.addNonExistingStocks();
     this.loading = false;
   }
 
@@ -91,14 +94,14 @@ export class PortofolioComponent {
         const bet = this.appState.$betIndex().get(key)!;
         this.dataset.push({
           name: bet.symbol,
-          value: Math.trunc(this.getStockBuyValue(bet, bet.proc)),
+          value: Math.trunc(this.getStockBuyValue(bet.symbol, bet.proc)),
         });
         newStocks.push({
           name: bet.name,
           betProc: bet.proc,
           symbol: bet.symbol,
           qty: 0,
-          toBuy: this.getStockBuyValue(bet, bet.proc),
+          toBuy: this.getStockBuyValue(bet.symbol, bet.proc),
           value: 0,
           proc: 0,
           type: bet.type,
@@ -107,15 +110,18 @@ export class PortofolioComponent {
     }
   }
 
-  private getStockBuyValue(stock: Stock, betProc: number): number {
-    if (!stock.value || !stock.cProc) {
+  private getStockBuyValue(stockSymbol: string, betProc: number): number {
+    const stock = this.appState
+      .$stocks()
+      ?.find((stock: Stock) => stock.symbol === stockSymbol);
+    if (!stock?.value || !stock.cProc) {
       return -1 * (betProc / 100) * this.marketCap;
     }
 
     const toBuyProc = betProc - stock.cProc;
     const toBuy = (toBuyProc * stock.value) / stock.cProc;
-    
-    return -1 * (toBuy + (toBuy * stock.betProc! / 100));
+
+    return -1 * (toBuy + (toBuy * stock.betProc!) / 100);
   }
 
   private setStockProcentPerMarket(stocks: Array<Stock>): void {

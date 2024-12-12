@@ -1,10 +1,14 @@
-import {StockType} from './stock-type';
+import { StockType } from './stock-type';
 
-export type Stock = {
+export type BaseStock = {
   name: string;
   proc: number;
   type: StockType;
   symbol: string;
+  hidden?: boolean;
+};
+
+export type Stock = BaseStock & {
   qty: number;
   value?: number;
   toBuy?: number;

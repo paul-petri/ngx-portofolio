@@ -1,8 +1,14 @@
 import { CommonModule } from '@angular/common';
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { MatDialogModule } from '@angular/material/dialog';
 import { BET20map } from 'src/app/data/bet20map';
-import { Stock } from 'src/app/models/stock';
+import { BaseStock, Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
 
 @Component({
@@ -14,46 +20,66 @@ import { AppStore } from 'src/app/services/app.store';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class IndexModalComponent {
-  stocks = new Array<Stock>();
+  private readonly appStore = inject(AppStore);
 
-  appState = inject(AppStore);
+  protected readonly stocks = signal<BaseStock[]>(this.initializeStocks());
+  protected readonly visibleStocks = computed(() =>
+    this.stocks().filter((stock) => !stock.hidden)
+  );
+  protected readonly totalPercentage = computed(() =>
+    this.visibleStocks().reduce((acc, curr) => acc + curr.proc, 0)
+  );
 
-  constructor() {
-    for (let [_, value] of this.appState.$betIndex()) {
-       this.stocks.push({ symbol: value.symbol, proc: value.proc, name: value.name, type: value.type, qty: 0});
-    };
+  private initializeStocks(): BaseStock[] {
+    const currentIndex = this.appStore.$betIndex();
+    return Array.from(currentIndex.values()).map((stock) => ({
+      symbol: stock.symbol,
+      proc: stock.proc,
+      name: stock.name,
+      type: stock.type,
+      hidden: stock.hidden ?? false,
+    }));
   }
 
-  removeStock(index: number): void {
-    const removedStock = this.stocks[index];
+  protected removeStock(symbol: string): void {
+    this.stocks.update((stocks) => {
+      const stockToHide = stocks.find((stock) => stock.symbol === symbol);
+      if (!stockToHide) return stocks;
 
-    this.stocks.splice(index, 1);
+      stockToHide.hidden = true;
+      const updatedStocks = [...stocks];
 
-    this.recalculate(removedStock);
+      // Recalculate percentages only for visible stocks
+      const visibleStocks = updatedStocks.filter((s) => !s.hidden);
+      const totalProc = visibleStocks.reduce((acc, curr) => acc + curr.proc, 0);
+
+      return updatedStocks.map((stock) => ({
+        ...stock,
+        proc: !stock.hidden
+          ? stock.proc + (stock.proc / totalProc) * stockToHide.proc
+          : stock.proc,
+      }));
+    });
   }
 
-  saveIndex(): void {
-    const betMap = new Map<string, Stock>();
-
-    this.stocks.forEach(stock => {
+  protected saveIndex(): void {
+    const betMap = new Map<string, BaseStock>();
+    // Save all stocks including hidden ones
+    this.stocks().forEach((stock) => {
       betMap.set(stock.symbol, stock);
     });
-    this.appState.setBetIndex(betMap);
-  } 
-
-  resetIndex(): void {
-    this.stocks = [];
-    for (let [_, value] of BET20map) {
-        this.stocks.push({ symbol: value.symbol, proc: value.proc, name: value.name, type: value.type, qty: 0});
-    };
+    this.appStore.setBetIndex(betMap);
   }
 
-  recalculate(removedStock: Stock): void {
-    const totalPercentage = this.stocks.reduce((acc, curr) => acc + curr.proc, 0);;
-
-    this.stocks.forEach(stock => {
-        const redistributionShare = stock.proc / totalPercentage;
-        stock.proc += redistributionShare * removedStock.proc;
-    });
+  protected resetIndex(): void {
+    this.stocks.set(
+      Array.from(BET20map.values()).map((stock) => ({
+        symbol: stock.symbol,
+        proc: stock.proc,
+        name: stock.name,
+        type: stock.type,
+        hidden: false,
+      }))
+    );
   }
 }

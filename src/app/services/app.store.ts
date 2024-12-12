@@ -2,7 +2,7 @@ import { Injectable, inject, signal, effect } from '@angular/core';
 import { Portofolio } from '../models/portofolio';
 import { Message } from '../models/message';
 import { Command } from '../models/commands';
-import { Stock } from '../models/stock';
+import { BaseStock, Stock } from '../models/stock';
 import { StorageService } from './storage.service';
 import { User } from '../models/login';
 import { Router } from '@angular/router';
@@ -26,9 +26,8 @@ export class AppStore {
     $user: signal<User | undefined>(undefined),
     $stocks: signal<Array<Stock> | undefined>(undefined),
     $loginError: signal<string>(''),
-    $betIndex: signal<Map<string, Stock>>(BET20map),
+    $betIndex: signal<Map<string, BaseStock>>(BET20map),
   };
-
 
   readonly $user = this.state.$user.asReadonly();
   readonly $stocks = this.state.$stocks.asReadonly();
@@ -70,7 +69,7 @@ export class AppStore {
     this.state.$user.set(user);
   }
 
-  setBetIndex(betIndex: Map<string, Stock>): void {
+  setBetIndex(betIndex: Map<string, BaseStock>): void {
     this.state.$betIndex.set(betIndex);
     this.storage.saveBetIndex(betIndex);
     this.updateStocksOnBetIndexChange();
@@ -91,7 +90,7 @@ export class AppStore {
     });
   }
 
-  mapMeesageToLogin(message: any): User {
+  mapMessageToLogin(message: any): User {
     return {
       user: message.prm.coduser,
       password: message.prm.parola,
@@ -106,11 +105,11 @@ export class AppStore {
     reader.onload = () => {
       const text = reader.result;
       const lines = text?.toString().split('\n');
-      for(const { idx, line } of lines!.map((line, idx) => ({ idx, line }))) {
+      for (const { idx, line } of lines!.map((line, idx) => ({ idx, line }))) {
         const data = line.split('\t');
         if (idx === 1) {
           this.evaluationIDX = data.indexOf('eval');
-          if (this.evaluationIDX === -1) { 
+          if (this.evaluationIDX === -1) {
             this.toastr.error('CSV invalid', 'Eroare');
             return;
           }
@@ -129,7 +128,7 @@ export class AppStore {
           }
         }
       }
-      
+
       myPortofolio.sort(
         (a: Stock, b: Stock) => (b.betProc || 0) - (a.betProc || 0)
       );
@@ -165,7 +164,7 @@ export class AppStore {
     const newStocks = new Array<Stock>();
     this.$stocks()?.forEach((stock: Stock) => {
       const betStock = this.$betIndex().get(stock.symbol);
-      if (betStock) {
+      if (betStock && !betStock.hidden) {
         newStocks.push({
           symbol: stock.symbol,
           name: betStock.name,
@@ -197,8 +196,13 @@ export class AppStore {
   }
 
   private initIndex(): void {
-    if(this.storage.getBetIndex()) {
-      this.state.$betIndex.set(this.storage.getBetIndex() || BET20map);
+    const storedIndex = this.storage.getBetIndex();
+    if (storedIndex) {
+      const filteredIndex = new Map(
+        Array.from(storedIndex.entries()).filter(([_, stock]) => !stock.hidden)
+      );
+
+      this.state.$betIndex.set(filteredIndex);
     }
   }
 
@@ -232,7 +236,7 @@ export class AppStore {
 
     if (message?.cmd === Command.LOGIN) {
       if (!message.err) {
-        this.storage.saveUser(this.mapMeesageToLogin(message));
+        this.storage.saveUser(this.mapMessageToLogin(message));
         this.getPortofolio();
       } else {
         this.state.$loginError.set(message.err);
