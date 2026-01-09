@@ -29,9 +29,11 @@ jobs:
       - name: Build application
         run: npm run build -- --base-href=/ngx-portofolio/
 
+      - name: Copy index.html to 404.html for SPA routing
+        run: cp ./dist/ngx-portofolio/index.html ./dist/ngx-portofolio/404.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist/ngx-portofolio
-          cname: false
