@@ -1,70 +1,95 @@
 <header
-  class="bg-white shadow dark:bg-gray-800 flex items-center justify-between"
+  class="sticky top-0 z-50 bg-white shadow-md dark:bg-gray-800 flex items-center justify-between px-3 py-3 sm:px-6"
 >
-  <div class="px-4">
+  <div class="flex-shrink-0">
     <button
       (click)="switchView()"
-      class="text-white inline-flex items-center bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-500 hover:to-yellow-500 sm:pr-35-px"
+      class="min-h-[44px] text-white inline-flex items-center bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-4 sm:px-5 py-2.5 text-center bg-gradient-to-r from-pink-500 to-blue-500 hover:from-pink-500 hover:to-yellow-500 transition-all duration-200 shadow-md hover:shadow-lg"
     >
       @if (chartView) {
         <img
           src="assets/img/grid.svg"
-          class="w-4 h-4 mr-2 icon-white"
-          alt="Upload"
+          class="w-5 h-5 sm:mr-2 icon-white"
+          alt="Grid view"
         />
-        <span class="sm:mr-2">Pagina detaliata</span>
-      } @else { 
+        <span class="hidden sm:inline">Pagina detaliata</span>
+      } @else {
         <img
           src="assets/img/chart.svg"
-          class="w-4 h-4 mr-2 icon-white"
-          alt="Upload"
+          class="w-5 h-5 sm:mr-2 icon-white"
+          alt="Chart view"
         />
-        <span class="sm:mr-2">Vezi grafic</span>
-      }</button
-    >
-  </div>
-  <div class="max-w-7xl md:px-4 lg:px-8 flex">
-    <h1 class="text-3xl font-bold tracking-tight text-gray-900 dark:text-blue-600">
-       Total : <span class="dark:text-lime-500">{{ marketCap | number : '1.0-0' }} RON</span>
-    </h1>
-    <div class="ml-7 items-center dark:text-white hidden sm:flex" [routerLink]="['/info']" >
-      Info
-      <img
-        src="assets/img/info.svg"
-        class="w-6 h-6 ml-3 h-30px w-30px cursor-pointer icon-white"
-        alt="Info"
-      />
-    </div>
-    
+        <span class="hidden sm:inline">Vezi grafic</span>
+      }
+    </button>
   </div>
 
-  <div class="md:px-4 relative">
+  <div class="flex-grow flex justify-center items-center px-2">
+    <div class="text-center">
+      <div class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 font-medium">Total Portofoliu</div>
+      <h1 class="text-lg sm:text-2xl lg:text-3xl font-bold tracking-tight text-gray-900 dark:text-blue-600">
+        <span class="dark:text-lime-500">{{ marketCap | number : '1.0-0' }}</span>
+        <span class="text-sm sm:text-base ml-1">RON</span>
+      </h1>
+    </div>
+  </div>
+
+  <div class="flex items-center gap-2">
     <button
-      class="cursor-pointer my-3 dark:text-white focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-5 text-center inline-flex items-center"
+      class="min-h-[44px] hidden sm:flex items-center dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg px-3 py-2 transition-colors cursor-pointer"
+      [routerLink]="['/info']"
+    >
+      <span class="font-medium mr-2">Info</span>
+      <img
+        src="assets/img/info.svg"
+        class="w-5 h-5 icon-white"
+        alt="Info"
+      />
+    </button>
+
+    <button
+      class="min-h-[44px] cursor-pointer dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 focus:ring-4 focus:outline-none font-medium rounded-lg text-sm px-3 sm:px-4 py-2 inline-flex items-center transition-colors relative"
       type="button"
       (click)="toggleMenu()"
     >
-      <span class="hidden sm:inline-flex">Menu</span>
+      <span class="hidden sm:inline mr-2 font-medium">Menu</span>
       <img
         src="assets/img/burger.svg"
-        class="w-4 h-4 m-2 icon-white"
-        alt="Upload"
+        class="w-5 h-5 icon-white"
+        alt="Menu"
       />
     </button>
+  </div>
+
+  <div
+    *ngIf="menuOpen"
+    class="origin-top-right absolute top-16 right-4 z-20 w-64 rounded-lg shadow-xl ring-1 ring-black ring-opacity-5 bg-white dark:bg-gray-700"
+  >
     <div
-      *ngIf="menuOpen"
-      class="origin-top-left z-10 fixed rounded-md ring-1 ring-black ring-opacity-5 bg-white rounded-lg dark:bg-gray-700 -mx-28 w-56"
+      class="py-2"
+      role="menu"
+      aria-orientation="vertical"
+      aria-labelledby="options-menu"
     >
       <div
-        class="py-1"
-        role="menu"
-        aria-orientation="vertical"
-        aria-labelledby="options-menu"
+        (click)="editIndex()"
+        class="min-h-[44px] dark:text-white px-4 py-3 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500 flex items-center transition-colors"
       >
-        <div (click)="editIndex()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Editeaza Indicele</div>
-        <div (click)="logOut()" class="dark:text-white p-4 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-lime-500">Log Out</div>
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+        </svg>
+        <span class="font-medium">Editeaza Indicele</span>
       </div>
-  </div>
+      <div
+        (click)="logOut()"
+        class="min-h-[44px] dark:text-white px-4 py-3 dark:hover:bg-gray-600 cursor-pointer dark:hover:text-red-500 flex items-center transition-colors"
+      >
+        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"/>
+        </svg>
+        <span class="font-medium">Log Out</span>
+      </div>
+    </div>
   </div>
 
 </header>

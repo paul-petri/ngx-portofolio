@@ -89,12 +89,18 @@ export class PortofolioComponent {
     let newStocks: Stock[] = [];
 
     for (let key of this.appState.$betIndex().keys()) {
+      const bet = this.appState.$betIndex().get(key)!;
+
+      // Skip hidden stocks
+      if (bet.hidden) {
+        continue;
+      }
+
       const exists = this.appState
         .$stocks()
         ?.some((stock: Stock) => stock.symbol === key);
 
       if (!exists) {
-        const bet = this.appState.$betIndex().get(key)!;
         this.dataset.push({
           name: bet.symbol,
           value: Math.trunc(this.getStockBuyValue(bet.symbol, bet.proc)),

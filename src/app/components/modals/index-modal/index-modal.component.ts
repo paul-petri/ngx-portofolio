@@ -7,6 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
+import { ToastrService } from 'ngx-toastr';
 import { BET20map } from 'src/app/data/bet20map';
 import { BaseStock, Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
@@ -22,6 +23,7 @@ import { AppStore } from 'src/app/services/app.store';
 export class IndexModalComponent {
   private readonly appStore = inject(AppStore);
   private readonly dialogRef = inject(MatDialogRef<IndexModalComponent>);
+  private readonly toastr = inject(ToastrService);
 
   protected readonly stocks = signal<BaseStock[]>(this.initializeStocks());
   protected readonly visibleStocks = computed(() =>
@@ -54,6 +56,11 @@ export class IndexModalComponent {
       const visibleStocks = updatedStocks.filter((s) => !s.hidden);
       const totalProc = visibleStocks.reduce((acc, curr) => acc + curr.proc, 0);
 
+      this.toastr.warning(`${stockToHide.symbol} eliminat din index`, 'Actiune', {
+        progressBar: true,
+        timeOut: 2000,
+      });
+
       return updatedStocks.map((stock) => ({
         ...stock,
         proc: !stock.hidden
@@ -70,6 +77,10 @@ export class IndexModalComponent {
       betMap.set(stock.symbol, stock);
     });
     this.appStore.setBetIndex(betMap);
+    this.toastr.success('Index actualizat cu succes!', 'Salvat', {
+      progressBar: true,
+      timeOut: 3000,
+    });
     // Close the modal after saving
     this.dialogRef.close();
   }
@@ -84,5 +95,9 @@ export class IndexModalComponent {
         hidden: false,
       }))
     );
+    this.toastr.info('Index resetat la valorile BET20', 'Reset', {
+      progressBar: true,
+      timeOut: 3000,
+    });
   }
 }

@@ -1,44 +1,76 @@
-<div class="h-full dark:bg-gray-900">
+<div class="h-full dark:bg-gray-900 min-h-screen">
   <app-header [marketCap]="marketCap" [(chartView)]="chartView" />
-  <div class="flex justify-center items-center mt-6">
+
+  <div class="flex flex-col sm:flex-row justify-center items-center gap-3 mt-6 px-4">
     <button
       (click)="uploadFileModal()"
-      class="rounded inline-flex items-center text-white bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-5 py-2.5 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500"
+      class="w-full sm:w-auto min-h-[44px] rounded inline-flex items-center justify-center text-white bg-primary-600 focus:outline-none font-medium rounded-lg text-sm px-6 py-3 text-center bg-gradient-to-r from-green-400 to-blue-500 hover:from-pink-500 hover:to-yellow-500 shadow-lg hover:shadow-xl transition-all duration-200"
     >
-      <img src="assets/img/upload-file.svg" class="w-4 h-4 mr-2 icon-white" alt="Upload">
-      Adauga portofoliul tau
+      <img src="assets/img/upload-file.svg" class="w-5 h-5 mr-2 icon-white" alt="Upload">
+      <span class="font-semibold">Adauga portofoliul tau</span>
     </button>
 
     <button
-      class="flex md:hidden ml-2 my-3 dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center items-center dark:hover:bg-blue-700 dark:focus:ring-blue-800"
+      class="flex md:hidden w-full sm:w-auto min-h-[44px] dark:text-white focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm px-6 py-3 text-center items-center justify-center dark:hover:bg-blue-700 dark:focus:ring-blue-800 bg-gray-700 hover:bg-gray-600 transition-all duration-200"
       type="button"
       [routerLink]="['/info']"
     >
-      Info
+      <span class="font-semibold">Info</span>
       <img
         src="assets/img/info.svg"
-        class="w-6 h-6 ml-3 h-30px w-30px cursor-pointer icon-white"
+        class="w-5 h-5 ml-2 icon-white"
         alt="Info"
       />
     </button>
   </div>
 
   @if (chartView) {
-  <div class="chart">
-    
-    <p class="dark:text-white p-6 lg:mx-36 inline-block">
-      In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe 0
-      <span class="dark:text-lime-500 font-bold ml-2"> + </span> 
-      inseamna ca ai o detinere prea mare  
-      <span class="dark:text-lime-500 font-bold ml-2"> - </span> 
-       trebuie sa cumperi de acea suma.
-    </p>
+  <div class="chart px-4">
+
+    <div class="bg-blue-50 dark:bg-gray-800 border-l-4 border-blue-500 p-4 my-6 mx-auto max-w-4xl rounded-lg shadow-sm">
+      <div class="flex items-start">
+        <div class="flex-shrink-0">
+          <svg class="h-5 w-5 text-blue-500" fill="currentColor" viewBox="0 0 20 20">
+            <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+          </svg>
+        </div>
+        <div class="ml-3">
+          <p class="text-sm text-gray-700 dark:text-gray-300">
+            In mod ideal, pentru a urmari indicele BET, toate ar trebui sa fie pe <strong class="text-blue-600">0</strong>
+          </p>
+          <div class="mt-2 text-sm">
+            <span class="inline-flex items-center px-2 py-1 rounded bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200 mr-2">
+              <span class="font-bold mr-1">+</span> Detinere prea mare
+            </span>
+            <span class="inline-flex items-center px-2 py-1 rounded bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200">
+              <span class="font-bold mr-1">-</span> Trebuie sa cumperi
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
 
     @if (loading) {
-    <div *ngIf="loading">Loading</div>
+    <div class="flex flex-col items-center justify-center py-20">
+      <div class="relative w-24 h-24">
+        <div class="absolute top-0 left-0 w-full h-full border-8 border-gray-200 dark:border-gray-700 rounded-full"></div>
+        <div class="absolute top-0 left-0 w-full h-full border-8 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+      </div>
+      <p class="mt-4 text-lg text-gray-600 dark:text-gray-400 font-medium">Se incarca datele...</p>
+    </div>
+    } @else if (dataset.length === 0) {
+    <div class="flex flex-col items-center justify-center py-20 px-4">
+      <svg class="w-24 h-24 text-gray-400 mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/>
+      </svg>
+      <h3 class="text-xl font-semibold text-gray-700 dark:text-gray-300 mb-2">Portofoliul tau este gol</h3>
+      <p class="text-gray-600 dark:text-gray-400 text-center max-w-md">
+        Adauga portofoliul tau pentru a vedea graficul si detaliile investitiilor.
+      </p>
+    </div>
     } @else {
     <div class="h-screen lg:mx-6">
-      <div class="min-h-full sm:px-6 dark-chart" *ngIf="!loading">
+      <div class="min-h-full sm:px-6 dark-chart">
         <ngx-charts-bar-vertical
           [results]="dataset"
           [xAxisLabel]="''"
@@ -58,6 +90,6 @@
     }
   </div>
   } @else {
-  <app-detailed-view [marketCap]="marketCap" class="w-full block text-center" />
+  <app-detailed-view [marketCap]="marketCap" class="w-full block" />
   }
 </div>
