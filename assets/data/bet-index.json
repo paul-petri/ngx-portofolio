@@ -1,0 +1,127 @@
+{
+  "lastUpdated": "2026-01-09T10:00:00Z",
+  "source": "https://m.bvb.ro/FinancialInstruments/Indices/IndicesProfiles.aspx?i=BET",
+  "totalWeight": 100.97,
+  "companies": [
+    {
+      "symbol": "TLV",
+      "name": "Banca Transilvania",
+      "proc": 19.70,
+      "type": "BET"
+    },
+    {
+      "symbol": "SNP",
+      "name": "OMV Petrom",
+      "proc": 18.43,
+      "type": "BET"
+    },
+    {
+      "symbol": "SNG",
+      "name": "Romgaz",
+      "proc": 11.82,
+      "type": "BET"
+    },
+    {
+      "symbol": "H2O",
+      "name": "Hidroelectrica",
+      "proc": 10.70,
+      "type": "BET"
+    },
+    {
+      "symbol": "BRD",
+      "name": "BRD Groupe Societe Generale",
+      "proc": 7.02,
+      "type": "BET"
+    },
+    {
+      "symbol": "TGN",
+      "name": "Transgaz",
+      "proc": 6.19,
+      "type": "BET"
+    },
+    {
+      "symbol": "DIGI",
+      "name": "Digi Communications",
+      "proc": 4.56,
+      "type": "BET"
+    },
+    {
+      "symbol": "EL",
+      "name": "Electrica",
+      "proc": 4.52,
+      "type": "BET"
+    },
+    {
+      "symbol": "M",
+      "name": "MedLife",
+      "proc": 4.00,
+      "type": "BET"
+    },
+    {
+      "symbol": "SNN",
+      "name": "Nuclearelectrica",
+      "proc": 3.43,
+      "type": "BET"
+    },
+    {
+      "symbol": "TEL",
+      "name": "Transelectrica",
+      "proc": 2.19,
+      "type": "BET"
+    },
+    {
+      "symbol": "FP",
+      "name": "Fondul Proprietatea",
+      "proc": 1.35,
+      "type": "BET"
+    },
+    {
+      "symbol": "ONE",
+      "name": "One United Properties",
+      "proc": 1.27,
+      "type": "BET"
+    },
+    {
+      "symbol": "PE",
+      "name": "Premier Energy",
+      "proc": 1.17,
+      "type": "BET"
+    },
+    {
+      "symbol": "AQ",
+      "name": "Aquila",
+      "proc": 0.82,
+      "type": "BET"
+    },
+    {
+      "symbol": "ATB",
+      "name": "Antibiotice Iasi",
+      "proc": 0.80,
+      "type": "BET"
+    },
+    {
+      "symbol": "TTS",
+      "name": "Transport Trade Services",
+      "proc": 0.66,
+      "type": "BET"
+    },
+    {
+      "symbol": "TRP",
+      "name": "TeraPlast",
+      "proc": 0.66,
+      "type": "BET"
+    },
+    {
+      "symbol": "SFG",
+      "name": "Sphera Franchise Group",
+      "proc": 0.56,
+      "type": "BET"
+    },
+    {
+      "symbol": "WINE",
+      "name": "Purcari Wineries",
+      "proc": 0.15,
+      "type": "BET"
+    }
+  ]
+}
