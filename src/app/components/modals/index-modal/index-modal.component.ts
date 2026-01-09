@@ -6,7 +6,7 @@ import {
   inject,
   signal,
 } from '@angular/core';
-import { MatDialogModule } from '@angular/material/dialog';
+import { MatDialogModule, MatDialogRef } from '@angular/material/dialog';
 import { BET20map } from 'src/app/data/bet20map';
 import { BaseStock, Stock } from 'src/app/models/stock';
 import { AppStore } from 'src/app/services/app.store';
@@ -21,6 +21,7 @@ import { AppStore } from 'src/app/services/app.store';
 })
 export class IndexModalComponent {
   private readonly appStore = inject(AppStore);
+  private readonly dialogRef = inject(MatDialogRef<IndexModalComponent>);
 
   protected readonly stocks = signal<BaseStock[]>(this.initializeStocks());
   protected readonly visibleStocks = computed(() =>
@@ -69,6 +70,8 @@ export class IndexModalComponent {
       betMap.set(stock.symbol, stock);
     });
     this.appStore.setBetIndex(betMap);
+    // Close the modal after saving
+    this.dialogRef.close();
   }
 
   protected resetIndex(): void {

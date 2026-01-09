@@ -32,7 +32,10 @@ export class PortofolioComponent {
   constructor() {
     effect(
       () => {
-        if (this.appState.$stocks()) {
+        // Trigger recalculation when stocks OR betIndex changes
+        const stocks = this.appState.$stocks();
+        const betIndex = this.appState.$betIndex();
+        if (stocks) {
           this.marketCap =
             this.appState
               .$stocks()
@@ -78,7 +81,7 @@ export class PortofolioComponent {
       newStocks.push(clone);
     });
 
-    // this.addNonExistingStocks();
+    this.addNonExistingStocks();
     this.loading = false;
   }
 

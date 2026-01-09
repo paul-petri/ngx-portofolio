@@ -1,0 +1,73 @@
+name: Update BET Index Daily
+
+on:
+  schedule:
+    # Run every day at 2:00 AM UTC (after market close in Romania)
+    - cron: '0 2 * * *'
+
+  # Allow manual trigger from GitHub Actions UI
+  workflow_dispatch:
+
+permissions:
+  contents: write  # Needed to commit and push changes
+
+jobs:
+  update-bet-index:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Fetch BET index data from BVB
+        id: fetch
+        run: |
+          echo "🔄 Fetching latest BET index composition..."
+          chmod +x ./scripts/update-bet-index-json.sh
+          ./scripts/update-bet-index-json.sh
+
+      - name: Check for changes
+        id: changes
+        run: |
+          if git diff --quiet src/assets/data/bet-index.json; then
+            echo "changed=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ No changes detected in BET index"
+          else
+            echo "changed=true" >> $GITHUB_OUTPUT
+            echo "✅ BET index has been updated"
+            git diff src/assets/data/bet-index.json
+          fi
+
+      - name: Run validation tests
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          echo "🧪 Running validation tests..."
+          npm ci
+          npm test -- --include='**/bet20map.spec.ts' --browsers=ChromeHeadless --watch=false
+
+      - name: Commit and push changes
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add src/assets/data/bet-index.json
+          git commit -m "🤖 Auto-update BET index weights - $(date +'%Y-%m-%d')"
+          git push
+
+      - name: Deploy notification
+        if: steps.changes.outputs.changed == 'true'
+        run: |
+          echo "📢 BET index updated and committed successfully!"
+          echo "🚀 GitHub Pages will auto-deploy the changes"
+
+      - name: No changes notification
+        if: steps.changes.outputs.changed == 'false'
+        run: |
+          echo "✓ BET index is up to date - no changes needed"

@@ -62,7 +62,10 @@ export class DetailedViewComponent {
   constructor() {
     effect(
       () => {
-        if (this.appState.$stocks()) {
+        // Trigger recalculation when stocks OR betIndex changes
+        const stocks = this.appState.$stocks();
+        const betIndex = this.appState.$betIndex();
+        if (stocks) {
           this.setStocks();
         }
       },
@@ -101,7 +104,7 @@ export class DetailedViewComponent {
     });
 
     this.detailedStocks.set(newStocks);
-    // this.addNonExistingStocks();
+    this.addNonExistingStocks();
     this.setGeneralInfo();
   }
 

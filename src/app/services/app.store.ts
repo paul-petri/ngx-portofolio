@@ -196,14 +196,26 @@ export class AppStore {
   }
 
   private initIndex(): void {
-    const storedIndex = this.storage.getBetIndex();
-    if (storedIndex) {
-      const filteredIndex = new Map(
-        Array.from(storedIndex.entries()).filter(([_, stock]) => !stock.hidden)
-      );
-
-      this.state.$betIndex.set(filteredIndex);
-    }
+    // Load BET index from JSON (runtime), with fallback to embedded data
+    this.storage.loadBetIndexFromJson().subscribe({
+      next: (betIndex) => {
+        const filteredIndex = new Map(
+          Array.from(betIndex.entries()).filter(([_, stock]) => !stock.hidden)
+        );
+        this.state.$betIndex.set(filteredIndex);
+      },
+      error: (err) => {
+        console.error('Failed to load BET index:', err);
+        // Fallback to stored index or embedded BET20map
+        const storedIndex = this.storage.getBetIndex();
+        if (storedIndex) {
+          const filteredIndex = new Map(
+            Array.from(storedIndex.entries()).filter(([_, stock]) => !stock.hidden)
+          );
+          this.state.$betIndex.set(filteredIndex);
+        }
+      }
+    });
   }
 
   private initWebSocket(): void {
