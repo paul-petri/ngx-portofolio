@@ -1,12 +1,12 @@
 {
-  "lastUpdated": "2026-01-09T10:00:00Z",
+  "lastUpdated": "2026-01-09T09:26:41.428249+00:00",
   "source": "https://m.bvb.ro/FinancialInstruments/Indices/IndicesProfiles.aspx?i=BET",
-  "totalWeight": 100.97,
+  "totalWeight": 100.0,
   "companies": [
     {
       "symbol": "TLV",
       "name": "Banca Transilvania",
-      "proc": 19.70,
+      "proc": 19.7,
       "type": "BET"
     },
     {
@@ -24,7 +24,7 @@
     {
       "symbol": "H2O",
       "name": "Hidroelectrica",
-      "proc": 10.70,
+      "proc": 10.7,
       "type": "BET"
     },
     {
@@ -54,7 +54,7 @@
     {
       "symbol": "M",
       "name": "MedLife",
-      "proc": 4.00,
+      "proc": 4.0,
       "type": "BET"
     },
     {
@@ -96,7 +96,7 @@
     {
       "symbol": "ATB",
       "name": "Antibiotice Iasi",
-      "proc": 0.80,
+      "proc": 0.8,
       "type": "BET"
     },
     {
