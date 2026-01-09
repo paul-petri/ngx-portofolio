@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:prod": "ng build --base-href=/ngx-portofolio/",
+    "deploy": "ng build --base-href=/ngx-portofolio/ && npx angular-cli-ghpages --dir=dist/ngx-portofolio",
     "watch": "ng build --watch --configuration development",
     "test": "ng test"
   },
