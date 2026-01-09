@@ -1,0 +1,15 @@
+{
+  "permissions": {
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:www.tradingview.com)",
+      "WebFetch(domain:m.bvb.ro)",
+      "WebFetch(domain:bvb.ro)",
+      "Bash(curl:*)",
+      "Bash(python3:*)",
+      "Bash(cat:*)",
+      "Bash(chmod:*)",
+      "Bash(npm test:*)"
+    ]
+  }
+}
