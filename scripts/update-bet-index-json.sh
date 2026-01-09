@@ -107,7 +107,8 @@ with open("src/assets/data/bet-index.json", 'r') as f:
 print(f"   Companies: {len(data['companies'])}")
 print(f"   Total Weight: {data['totalWeight']}%")
 print(f"   Last Updated: {data['lastUpdated']}")
-print(f"   Top 3: {', '.join([f\"{c['symbol']} ({c['proc']}%)\" for c in data['companies'][:3]])}")
+top_3 = ', '.join(["{} ({}%)".format(c['symbol'], c['proc']) for c in data['companies'][:3]])
+print(f"   Top 3: {top_3}")
 PYTHON_SUMMARY
   echo ""
   echo "📁 Output file: $OUTPUT_FILE"
